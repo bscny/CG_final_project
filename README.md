@@ -36,4 +36,8 @@ Author: 111703040 游宗諺
     - trace_shadow_ray function implementation, in order to cast shadows
 2. `vec3`, `ray`
     - seperate .cpp and .h file from Hw1
-3. `sphere.h` and `sphere.cpp`
+3. `object.h` and `object.cpp` to implement polymorphism
+4. `sphere.h` and `sphere.cpp`
+5. `triangle.h` and `triangle.cpp`
+6. `mesh.h` and `mesh.cpp`
+    - this mostly uses `Triangle` to form some basic meshes, for example, tetrahedron
