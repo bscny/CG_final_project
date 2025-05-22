@@ -9,6 +9,7 @@
 #include "tools/ray.h"
 #include "tools/object.h"
 
+#include "scene_objects/light.h"
 #include "scene_objects/sphere.h"
 #include "scene_objects/triangle.h"
 #include "scene_objects/mesh.h"
@@ -53,13 +54,16 @@ int main()
 	create_scene_objects(obj_list);
 
 	// light params
-	vector<Vec3> light_sources;
-	vector<Vec3> light_intensities;
-	create_scene_lights(light_sources, light_intensities);
+	vector<Light> lights;
+	create_scene_lights(lights);
 
 	fstream file;
 	// relative to /build
-	file.open("../images/result.ppm", ios::out);
+	if(ANTI_ALIASING){
+		file.open("../images/result.ppm", ios::out);
+	}else{
+		file.open("../images/result_no_anti_aliasing.ppm", ios::out);
+	}
 
 	file << "P3\n" << WIDTH << " " << HEIGHT << "\n255\n";
 	for (int j = HEIGHT - 1; j >= 0; j--) {
@@ -74,7 +78,7 @@ int main()
 					Vec3 target_point = lower_left_coner + u * horizontal + v * vertical;
 					Ray r(origin, target_point - origin);
 
-					c += trace_color_ray(r, 5, obj_list, light_sources, light_intensities);
+					c += trace_color_ray(r, 5, obj_list, lights);
 				}
 
 				c /= float(SAMPLES_PER_PIXAL);
@@ -86,7 +90,7 @@ int main()
 				Ray r(origin, target_point - origin);
 	
 				// for each ray, see the final color it contributes to the screen
-				c = trace_color_ray(r, 5, obj_list, light_sources, light_intensities);
+				c = trace_color_ray(r, 5, obj_list, lights);
 			}
 
 			file << int(c[0] * 255) << " " << int(c[1] * 255) << " " << int(c[2] * 255) << "\n";

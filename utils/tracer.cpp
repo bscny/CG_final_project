@@ -20,7 +20,7 @@ float trace_shadow_ray(const Ray &r, float distance2light, const vector<Object *
 }
 
 // for each ray, see the interaction with every scene objs
-Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<Vec3> &light_sources, const vector<Vec3> &light_intensities){
+Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<Light> &lights){
 	if(bounce < 0){
 		return Vec3(0, 0, 0);
 	}
@@ -63,19 +63,19 @@ Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list,
 	Vec3 local_color;
 	float occlude_lv = 0;
 
-	for(int i = 0; i < (int)light_sources.size(); i ++){
-		Vec3 L(unit_vector(light_sources[i] - P));
+	for(int i = 0; i < (int)lights.size(); i ++){
+		Vec3 L(unit_vector(lights[i].get_position() - P));
 
 		if(dot(N, L) < 0){
 			local_color += Vec3(0, 0, 0);
 		}else{
-			occlude_lv = trace_shadow_ray(Ray(P, L), sqrt(dot(light_sources[i] - P, light_sources[i] - P)), obj_list);
-			local_color += occlude_lv * dot(N, L) * light_intensities[i];
+			occlude_lv = trace_shadow_ray(Ray(P, L), sqrt(dot(lights[i].get_position() - P, lights[i].get_position() - P)), obj_list);
+			local_color += occlude_lv * dot(N, L) * lights[i].get_intensity();
 		}
 	}
 
-	Vec3 reflected_color = trace_color_ray(R, bounce - 1, obj_list, light_sources, light_intensities);
-	Vec3 refracted_color = trace_color_ray(T, bounce - 1, obj_list, light_sources, light_intensities);
+	Vec3 reflected_color = trace_color_ray(R, bounce - 1, obj_list, lights);
+	Vec3 refracted_color = trace_color_ray(T, bounce - 1, obj_list, lights);
 
 	// return (1 - obj_list[record_index].get_w_r()) * local_color + obj_list[record_index].get_w_r() * reflected_color;
 	return (1 - obj_list[record_index]->get_w_t()) * 

@@ -36,15 +36,10 @@ void create_scene_objects(vector<Object *> &obj_list){
 	}
 }
 
-void create_scene_lights(vector<Vec3> &light_sources, vector<Vec3> &light_intensities){
+void create_scene_lights(vector<Light> &lights){
     // set up lights
-	light_sources.push_back(Vec3(-10, 10, 0));
-	// light_intensities.push_back(Vec3(1, 1, 1));
-	light_intensities.push_back(Vec3(0.5, 0, 0));
-	light_sources.push_back(Vec3(10, 10, 0));
-	light_intensities.push_back(Vec3(0.25, 0.25, 0.5));
-	light_sources.push_back(Vec3(0, 10, 10));
-	light_intensities.push_back(Vec3(0, 0.5, 0));
-	light_sources.push_back(Vec3(0, 10, -10));
-	light_intensities.push_back(Vec3(0.25, 0.25, 0.5));
+	lights.push_back(Light(Vec3(-10, 10, 0), Vec3(0.5, 0, 0)));
+	lights.push_back(Light(Vec3(10, 10, 0), Vec3(0.25, 0.25, 0.5)));
+	lights.push_back(Light(Vec3(0, 10, 10), Vec3(0, 0.5, 0)));
+	lights.push_back(Light(Vec3(0, 10, -10), Vec3(0.25, 0.25, 0.5)));
 }
