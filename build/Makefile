@@ -33,15 +33,15 @@ OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.cpp=.o)))
 TARGET = main
 
 # Default target
-all: $(OBJ_DIR) $(TARGET)
+all: $(TARGET)
+
+# Build the executable
+$(TARGET): $(OBJ_DIR) $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)
 
 # Create obj directory
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
-
-# Build the executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)
 
 # Universal rule: compile any .cpp to obj/%.o
 $(OBJ_DIR)/%.o: %.cpp
