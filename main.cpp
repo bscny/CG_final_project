@@ -20,7 +20,7 @@ using namespace std;
 int WIDTH = 1000;
 int HEIGHT = 500;
 int SAMPLES_PER_PIXAL = 25;
-bool ANTI_ALIASING = false;
+bool ANTI_ALIASING = true;
 
 // camera params
 Vec3 LOWER_LEFT_CONER(-2, -1, -1);
@@ -29,8 +29,8 @@ Vec3 HORIZONTAL(4, 0, 0);
 Vec3 VERTICAL(0, 2, 0);
 
 // light params
-Vec3 LIGHT_POS(-10, 10, 0);
-Vec3 LIGHT_INTENSITY(1, 1, 1);
+vector<Vec3> LIGHT_SOURCES;
+vector<Vec3> LIGHT_INTENSITYS;
 
 // scene object params
 vector<Object *> OBJ_LIST;
@@ -79,7 +79,6 @@ Vec3 color(const Ray &r, int bounce){
 	// apply shading result
 	Vec3 P(r.point_at_parameter(t));
 	Vec3 N(OBJ_LIST[record_index]->get_normal_at(P));
-	Vec3 L(unit_vector(LIGHT_POS - P));
 	Vec3 In(-r.Dir);
 
 	// the reflection ray
@@ -96,11 +95,15 @@ Vec3 color(const Ray &r, int bounce){
 	Vec3 local_color;
 	float occlude_lv = 0;
 
-	if(dot(N, L) < 0){
-		local_color = Vec3(0, 0, 0);
-	}else{
-		occlude_lv = trace_shadow_ray(Ray(P, L), sqrt(dot(LIGHT_POS - P, LIGHT_POS - P)) );
-		local_color = occlude_lv * dot(N, L) * LIGHT_INTENSITY;
+	for(int i = 0; i < (int)LIGHT_SOURCES.size(); i ++){
+		Vec3 L(unit_vector(LIGHT_SOURCES[i] - P));
+
+		if(dot(N, L) < 0){
+			local_color += Vec3(0, 0, 0);
+		}else{
+			occlude_lv = trace_shadow_ray(Ray(P, L), sqrt(dot(LIGHT_SOURCES[i] - P, LIGHT_SOURCES[i] - P)) );
+			local_color += occlude_lv * dot(N, L) * LIGHT_INTENSITYS[i];
+		}
 	}
 
 	Vec3 reflected_color = color(R, bounce - 1);
@@ -167,15 +170,19 @@ int main()
 		OBJ_LIST.push_back(new Sphere(Vec3(xr, -0.45, zr-2), 0.05, r1, r2));
 	}
 
+	// set up lights
+	LIGHT_SOURCES.push_back(Vec3(-10, 10, 0));
+	// LIGHT_INTENSITYS.push_back(Vec3(1, 1, 1));
+	LIGHT_INTENSITYS.push_back(Vec3(0.5, 0, 0));
+	LIGHT_SOURCES.push_back(Vec3(10, 10, 0));
+	LIGHT_INTENSITYS.push_back(Vec3(0.25, 0.25, 0.5));
+	LIGHT_SOURCES.push_back(Vec3(0, 10, 10));
+	LIGHT_INTENSITYS.push_back(Vec3(0, 0.5, 0));
+	LIGHT_SOURCES.push_back(Vec3(0, 10, -10));
+	LIGHT_INTENSITYS.push_back(Vec3(0.25, 0.25, 0.5));
+
 	fstream file;
-	// file.open("../images/default.ppm", ios::out);
-	// file.open("../images/reflection.ppm", ios::out);
-	// file.open("../images/refraction.ppm", ios::out);
-	// file.open("../images/default_shadow.ppm", ios::out);
-	// file.open("../images/shadow.ppm", ios::out);
-	// file.open("../images/final.ppm", ios::out);
-	// file.open("../images/plane.ppm", ios::out);
-	file.open("../images/test.ppm", ios::out);
+	file.open("../images/result.ppm", ios::out);
 
 	file << "P3\n" << WIDTH << " " << HEIGHT << "\n255\n";
 	for (int j = HEIGHT - 1; j >= 0; j--) {
