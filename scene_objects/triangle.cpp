@@ -97,7 +97,12 @@ float Triangle::hit(const Ray &ray, float min_t, float max_t){
     float t = inv_det * dot(V2, sXv1);
 
     if(t > 0.0001){
-        return t;
+        if(t < max_t && t > min_t){
+            // update the recorded index
+            return t;
+        }else{
+            return -1;
+        }
     }else{
         // this means the ray touches the triangle from behind
         return -1;

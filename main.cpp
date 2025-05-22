@@ -5,12 +5,13 @@
 #include <cstdlib>
 
 // custom
-#include "vec3.h"
-#include "ray.h"
-#include "sphere.h"
-#include "triangle.h"
-#include "object.h"
-#include "mesh.h"
+#include "tools/vec3.h"
+#include "tools/ray.h"
+#include "tools/object.h"
+
+#include "scene_objects/sphere.h"
+#include "scene_objects/triangle.h"
+#include "scene_objects/mesh.h"
 
 using namespace std;
 

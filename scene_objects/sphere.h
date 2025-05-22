@@ -1,9 +1,9 @@
 #ifndef SPHERE_H
 #define SPERE_H
 
-#include "vec3.h"
-#include "ray.h"
-#include "object.h"
+#include "tools/vec3.h"
+#include "tools/ray.h"
+#include "tools/object.h"
 
 class Sphere : public Object{
     public:
