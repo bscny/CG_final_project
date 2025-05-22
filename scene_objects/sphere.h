@@ -1,5 +1,5 @@
 #ifndef SPHERE_H
-#define SPERE_H
+#define SPHERE_H
 
 #include "tools/vec3.h"
 #include "tools/ray.h"

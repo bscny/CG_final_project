@@ -20,7 +20,7 @@ float trace_shadow_ray(const Ray &r, float distance2light, const vector<Object *
 }
 
 // for each ray, see the interaction with every scene objs
-Vec3 color(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<Vec3> &light_sources, const vector<Vec3> &light_intensities){
+Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<Vec3> &light_sources, const vector<Vec3> &light_intensities){
 	if(bounce < 0){
 		return Vec3(0, 0, 0);
 	}
@@ -74,8 +74,8 @@ Vec3 color(const Ray &r, int bounce, const vector<Object *> &obj_list, const vec
 		}
 	}
 
-	Vec3 reflected_color = color(R, bounce - 1, obj_list, light_sources, light_intensities);
-	Vec3 refracted_color = color(T, bounce - 1, obj_list, light_sources, light_intensities);
+	Vec3 reflected_color = trace_color_ray(R, bounce - 1, obj_list, light_sources, light_intensities);
+	Vec3 refracted_color = trace_color_ray(T, bounce - 1, obj_list, light_sources, light_intensities);
 
 	// return (1 - obj_list[record_index].get_w_r()) * local_color + obj_list[record_index].get_w_r() * reflected_color;
 	return (1 - obj_list[record_index]->get_w_t()) * 
