@@ -18,16 +18,17 @@ Author: 111703040 游宗諺
 ## Progress
 
 - Default function:
-    - [x] multiple sphere
-    - [x] nearest intersection point
-    - [x] Recursive Ray Tracer with shadow
-    - [x] Recursive Ray Tracer with shadow + reflection
-    - [x] Recursive Ray Tracer with shadow + reflection + transmission
+    - [x] multiple sphere (`default.ppm`)
+    - [x] nearest intersection point (`default.ppm`)
+    - [x] Recursive Ray Tracer with shadow (`default_shadow.ppm`)
+    - [x] Recursive Ray Tracer with reflection (`reflection.ppm`)
+    - [x] Recursive Ray Tracer with reflection + transmission (`refraction.ppm`)
+    - [x] Recursive Ray Tracer with shadow + reflection + transmission (`final.ppm`)
 - Bonus:
-    - [x] anti-aliasing
-    - [x] plane
-    - [x] tetrahedron
-    - [ ] multi lights
+    - [x] anti-aliasing (`anti_aliasing.ppm`)
+    - [x] plane (`plane.ppm`)
+    - [x] tetrahedron (didn't find proper sample scene... still trying)
+    - [x] multi lights (`multi_light.ppm`)
 
 ## Summary to the Modified Code
 

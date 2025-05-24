@@ -1,2 +1,6 @@
 test.cpp
 .vscode
+
+# in case someone forget to make clean
+main
+obj
