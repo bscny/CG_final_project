@@ -22,13 +22,19 @@ class Object{
         // getters
         float get_w_r() const;
         float get_w_t() const;
+        float get_reflective_index() const;
 
         // setters
         void set_w_r(float in);
         void set_w_t(float in);
+        void set_reflective_index(float in);
+    
     private:
         float w_r;
         float w_t;
+
+        // material reflectivity 
+        float reflective_index; 
 };
 
 #endif

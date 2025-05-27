@@ -36,6 +36,10 @@ float Object::get_w_t() const {
     return w_t;
 }
 
+float Object::get_reflective_index() const {
+    return reflective_index;
+}
+
 // setters
 void Object::set_w_r(float in) {
     w_r = in;
@@ -43,4 +47,8 @@ void Object::set_w_r(float in) {
 
 void Object::set_w_t(float in) {
     w_t = in;
+}
+
+void Object::set_reflective_index(float in) {
+    reflective_index = in;
 }
