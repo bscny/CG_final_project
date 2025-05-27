@@ -16,7 +16,8 @@ class Triangle : public Object{
         Triangle(Vec3 in1, Vec3 in2, Vec3 in3);
         Triangle(Vec3 in1, Vec3 in2, Vec3 in3, float in_w_r);
         Triangle(Vec3 in1, Vec3 in2, Vec3 in3, float in_w_r, float in_w_t);
-
+        Triangle(Vec3 in1, Vec3 in2, Vec3 in3, float in_w_r, float in_w_t, float in_reflective_index);
+        
         // virtuals
         virtual float hit(const Ray &ray, float min_t, float max_t);
         virtual Vec3 get_normal_at(Vec3 P) const;

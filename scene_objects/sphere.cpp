@@ -38,6 +38,11 @@ Sphere::Sphere(Vec3 c, float r, float in_w_r, float in_w_t) : Object(in_w_r, in_
     radius = r;
 }
 
+Sphere::Sphere(Vec3 c, float r, float in_w_r, float in_w_t, float in_reflective_index) : Object(in_w_r, in_w_t, in_reflective_index) {
+    center = c;
+    radius = r;
+}
+
 // get the t value for the given ray, if t < max_t, return the t
 float Sphere::hit(const Ray &ray, float min_t, float max_t){
     // O is origin of the ray, D is direction vector, C is sphere center. They are all vectors

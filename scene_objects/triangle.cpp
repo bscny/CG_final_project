@@ -62,6 +62,16 @@ Triangle::Triangle(Vec3 in1, Vec3 in2, Vec3 in3, float in_w_r, float in_w_t) : O
     V2 = P3 - P1;
 }
 
+Triangle::Triangle(Vec3 in1, Vec3 in2, Vec3 in3, float in_w_r, float in_w_t, float in_reflective_index
+                  ) : Object(in_w_r, in_w_t, in_reflective_index) {
+    P1 = in1;
+    P2 = in2;
+    P3 = in3;
+
+    V1 = P2 - P1;
+    V2 = P3 - P1;
+}
+
 // get the t value for the given ray, if t < max_t, return the t
 float Triangle::hit(const Ray &ray, float min_t, float max_t){
     // reference: https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm

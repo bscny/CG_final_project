@@ -1,12 +1,13 @@
 #include "set_up.h"
-
+#include "constant.h"
 using namespace std;
+
 
 void create_scene_objects(vector<Object *> &obj_list){
     // add floor
 	// obj_list.push_back(new Sphere(Vec3(0, -100.5, -2), 100));
-	obj_list.push_back(new Triangle(Vec3(-100, -0.55, 100), Vec3(100, -0.55, 100), Vec3(-100, -0.55, -100)));
-	obj_list.push_back(new Triangle(Vec3(100, -0.55, 100), Vec3(100, -0.55, -100), Vec3(-100, -0.55, -100)));
+	obj_list.push_back(new Triangle(Vec3(-100, -0.55, 100), Vec3(100, -0.55, 100), Vec3(-100, -0.55, -100), 0, 0, REFLECTIVE_INDEX_GLASS));
+	obj_list.push_back(new Triangle(Vec3(100, -0.55, 100), Vec3(100, -0.55, -100), Vec3(-100, -0.55, -100), 0, 0, REFLECTIVE_INDEX_DIAMOND));
 
 	// add main sphere
 	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0.9));
