@@ -62,8 +62,8 @@ Triangle::Triangle(Vec3 in1, Vec3 in2, Vec3 in3, float in_w_r, float in_w_t) : O
     V2 = P3 - P1;
 }
 
-Triangle::Triangle(Vec3 in1, Vec3 in2, Vec3 in3, float in_w_r, float in_w_t, float in_reflective_index
-                  ) : Object(in_w_r, in_w_t, in_reflective_index) {
+Triangle::Triangle(Vec3 in1, Vec3 in2, Vec3 in3, float in_w_r, float in_w_t, float in_refractive_index
+                  ) : Object(in_w_r, in_w_t, in_refractive_index) {
     P1 = in1;
     P2 = in2;
     P3 = in3;

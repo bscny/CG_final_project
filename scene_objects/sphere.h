@@ -16,7 +16,7 @@ class Sphere : public Object{
         Sphere(Vec3 c, float r);
         Sphere(Vec3 c, float r, float in_w_r);
         Sphere(Vec3 c, float r, float in_w_r, float in_w_t);
-        Sphere(Vec3 c, float r, float in_w_r, float in_w_t, float in_reflective_index);
+        Sphere(Vec3 c, float r, float in_w_r, float in_w_t, float in_refractive_index);
 
         // virtuals
         virtual float hit(const Ray &ray, float min_t, float max_t);

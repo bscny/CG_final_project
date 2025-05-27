@@ -38,7 +38,7 @@ Sphere::Sphere(Vec3 c, float r, float in_w_r, float in_w_t) : Object(in_w_r, in_
     radius = r;
 }
 
-Sphere::Sphere(Vec3 c, float r, float in_w_r, float in_w_t, float in_reflective_index) : Object(in_w_r, in_w_t, in_reflective_index) {
+Sphere::Sphere(Vec3 c, float r, float in_w_r, float in_w_t, float in_refractive_index) : Object(in_w_r, in_w_t, in_refractive_index) {
     center = c;
     radius = r;
 }

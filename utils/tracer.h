@@ -12,6 +12,6 @@ using namespace std;
 
 float trace_shadow_ray(const Ray &r, float distance2light, const vector<Object *> &obj_list);
 
-Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<Light> &lights, float current_reflective_index);
+Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<Light> &lights, float current_refractive_index);
 
 #endif
