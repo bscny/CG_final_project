@@ -11,8 +11,8 @@ void create_scene_objects(vector<Object *> &obj_list){
 
 	// add main sphere
 	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0.9, GLASS_N));
-	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 1, GLASS_N));
-	obj_list.push_back(new Sphere(Vec3(-1, 0, -2.25), 0.5, GLASS_N));
+	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 1));
+	obj_list.push_back(new Sphere(Vec3(-1, 0, -2.25), 0.5));
 
 	// add tetrahedron
 	/*Vec3 move(0, 0, -3);
