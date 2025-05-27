@@ -6,8 +6,10 @@
 #define   WIDTH    1000
 #define   HEIGHT    500
 
-#define   ANTI_ALIASING    false
+#define   ANTI_ALIASING    true
 #define   SAMPLES_PER_PIXAL    25
+
+#define   BOUNCE   5
 
 // refractive index
 #define   GLASS_N      1.5

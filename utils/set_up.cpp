@@ -6,13 +6,13 @@ using namespace std;
 void create_scene_objects(vector<Object *> &obj_list){
     // add floor
 	// obj_list.push_back(new Sphere(Vec3(0, -100.5, -2), 100));
-	obj_list.push_back(new Triangle(Vec3(-100, -0.55, 100), Vec3(100, -0.55, 100), Vec3(-100, -0.55, -100), 0, 0, GLASS_N));
-	obj_list.push_back(new Triangle(Vec3(100, -0.55, 100), Vec3(100, -0.55, -100), Vec3(-100, -0.55, -100), 0, 0, DIAMOND_N));
+	obj_list.push_back(new Triangle(Vec3(-100, -0.55, 100), Vec3(100, -0.55, 100), Vec3(-100, -0.55, -100), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(100, -0.55, 100), Vec3(100, -0.55, -100), Vec3(-100, -0.55, -100), 0, 0));
 
 	// add main sphere
 	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0.9, GLASS_N));
-	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 1));
-	obj_list.push_back(new Sphere(Vec3(-1, 0, -2.25), 0.5));
+	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.3, 0.7, WATER_N));
+	obj_list.push_back(new Sphere(Vec3(-1, 0, -2.25), 0.5, 0.8, 0.8, DIAMOND_N));
 
 	// add tetrahedron
 	/*Vec3 move(0, 0, -3);
