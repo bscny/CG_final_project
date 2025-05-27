@@ -27,6 +27,12 @@ Object::Object(float in_w_r, float in_w_t){
     w_t = in_w_t;
 }
 
+Object::Object(float in_w_r, float in_w_t, float in_reflective_index) {
+    w_r = in_w_r;
+    w_t = in_w_t;
+    reflective_index = in_reflective_index;
+}
+
 // getters
 float Object::get_w_r() const {
     return w_r;

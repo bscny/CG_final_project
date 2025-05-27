@@ -14,6 +14,7 @@ class Object{
         // other constructor
         Object(float in_w_r);
         Object(float in_w_r, float in_w_t);
+        Object(float in_w_r, float in_w_t, float in_reflective_index);
 
         // virtuals
         virtual float hit(const Ray &ray, float min_t, float max_t) = 0;
