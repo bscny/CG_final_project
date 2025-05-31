@@ -14,6 +14,7 @@ class Object{
         // other constructor
         Object(float in_w_r);
         Object(float in_w_r, float in_w_t);
+        Object(float in_w_r, float in_w_t, float in_refractive_index);
 
         // virtuals
         virtual float hit(const Ray &ray, float min_t, float max_t) = 0;
@@ -22,13 +23,19 @@ class Object{
         // getters
         float get_w_r() const;
         float get_w_t() const;
+        float get_refractive_index() const;
 
         // setters
         void set_w_r(float in);
         void set_w_t(float in);
+        void set_refractive_index(float in);
+    
     private:
         float w_r;
         float w_t;
+
+        // material refractivity 
+        float refractive_index; 
 };
 
 #endif
