@@ -63,7 +63,15 @@ float Sphere::hit(const Ray &ray, float min_t, float max_t){
             // update the recorded index
             return t;
         }else{
-            return -1;
+            // ray's Origin is touching the sphere
+            // try see the second intersact
+            t = (-b + sqrt(b_sqr - 4 * a * c)) / (2 * a);
+
+            if(t < max_t && t > min_t){
+                return t;
+            }else{
+                return -1;
+            }
         }
 	}else{
 		return -1;

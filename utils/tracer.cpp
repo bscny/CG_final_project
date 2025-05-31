@@ -58,7 +58,6 @@ Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list,
 	// see detailed in https://en.wikipedia.org/wiki/Snell%27s_law
 	// and https://physics.stackexchange.com/questions/435512/snells-law-in-vector-form
 	
-	// TODO custom the eta
 	// get the ratio of reflective index
 	float current_refractive_index;
 	float next_refractive_index;
@@ -68,13 +67,12 @@ Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list,
 	}else if(in_obj_index == record_index){
 		current_refractive_index = obj_list[in_obj_index]->get_refractive_index();
 		next_refractive_index = AIR_N;
-		cout << "in_obj_index: " << in_obj_index << "record_index: " << record_index << endl;
 	}else{
 		current_refractive_index = obj_list[in_obj_index]->get_refractive_index();
 		next_refractive_index = obj_list[record_index]->get_refractive_index();
 	}
 
-	// float eta = 1 / obj_list[record_index]->get_refractive_index();
+	// the refraction ray
 	float eta = current_refractive_index / next_refractive_index;
 	float cos2 = sqrt(1 - pow(eta, 2) * (1 - pow(dot(N, r.Dir), 2)) );
 	Ray T(P, eta * r.Dir + (eta * dot(N, r.Dir) - cos2) * N );
