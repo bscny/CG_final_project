@@ -1,6 +1,16 @@
+#include <random>
+
 #include "set_up.h"
 #include "constant.h"
 using namespace std;
+
+float get_random(float lower, float upper) {
+    static random_device rd;
+    static mt19937 gen(rd());
+    uniform_real_distribution<float> dist(lower, upper);
+
+    return dist(gen);
+}
 
 void create_scene_objects(vector<Object *> &obj_list){
     // add floor
@@ -23,12 +33,11 @@ void create_scene_objects(vector<Object *> &obj_list){
 	add_tetrahedron(obj_list, v1, v2, v3, v4, 0, 0);*/
 
 	// add random objs
-	srand(1234);
-	for (int i = 0; i < 48; i++) {
-		float xr = ((float)rand() / (float)(RAND_MAX)) * 6.0f - 3.0f;
-		float zr = ((float)rand() / (float)(RAND_MAX)) * 3.0f - 1.5f;
-		float r1 = ((float)rand() / (float)(RAND_MAX));
-		// float r2 = ((float)rand() / (float)(RAND_MAX)) - 0.5;
+	for (int i = 0; i < 40; i++) {
+		float xr = get_random(-2, 2);
+		float zr = get_random(-1.5, 1.5);
+		float r1 = get_random(0, 1);
+		// float r2 = get_random(0, 1) - 0.5;
 		// if (r2 < 0){
 		// 	r2 = 0;
 		// }
@@ -38,8 +47,31 @@ void create_scene_objects(vector<Object *> &obj_list){
 
 void create_scene_lights(vector<Light> &lights){
     // set up lights
-	lights.push_back(Light(Vec3(-10, 10, 0), Vec3(5, 0, 0)));
-	lights.push_back(Light(Vec3(10, 10, 0), Vec3(2.5, 2.5, 5)));
-	lights.push_back(Light(Vec3(0, 10, 10), Vec3(0, 5, 0)));
-	lights.push_back(Light(Vec3(0, 10, -10), Vec3(2.5, 2.5, 5)));
+	for (int i = 0; i < 1200; i++) {
+		float xr = get_random(-1.5, 1.5);
+		float zr = get_random(-6, 1);
+		float yr = get_random(0, 2);
+
+		float max_intensity = 0.05f;
+		float c = get_random(0, max_intensity);
+		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
+			// pure red
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
+		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
+			// red + green
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
+		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
+			// pure green
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
+		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
+			// green + blue
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
+		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
+			// pure blue
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
+		}else{
+			// red + blue
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, c)));
+		}
+	}
 }
