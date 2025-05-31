@@ -78,7 +78,7 @@ int main()
 					Vec3 target_point = lower_left_coner + u * horizontal + v * vertical;
 					Ray r(origin, target_point - origin);
 
-					c += trace_color_ray(r, BOUNCE, obj_list, lights);
+					c += trace_color_ray(r, BOUNCE, obj_list, lights, -1);
 				}
 
 				c /= float(SAMPLES_PER_PIXAL);
@@ -90,7 +90,7 @@ int main()
 				Ray r(origin, target_point - origin);
 	
 				// for each ray, see the final color it contributes to the screen
-				c = trace_color_ray(r, BOUNCE, obj_list, lights);
+				c = trace_color_ray(r, BOUNCE, obj_list, lights, -1);
 			}
 
 			file << int(c[0] * 255) << " " << int(c[1] * 255) << " " << int(c[2] * 255) << "\n";

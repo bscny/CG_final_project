@@ -11,8 +11,8 @@ void create_scene_objects(vector<Object *> &obj_list){
 
 	// add main sphere
 	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0.9, GLASS_N));
-	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.3, 0.7, WATER_N));
-	obj_list.push_back(new Sphere(Vec3(-1, 0, -2.25), 0.5, 0.8, 0.8, DIAMOND_N));
+	// obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.3, 0.7, WATER_N));
+	// obj_list.push_back(new Sphere(Vec3(-1, 0, -2.25), 0.5, 0.8, 0.8, DIAMOND_N));
 
 	// add tetrahedron
 	/*Vec3 move(0, 0, -3);
@@ -24,17 +24,17 @@ void create_scene_objects(vector<Object *> &obj_list){
 	add_tetrahedron(obj_list, v1, v2, v3, v4, 0, 0);*/
 
 	// add random objs
-	srand(12345);
-	for (int i = 0; i < 48; i++) {
-		float xr = ((float)rand() / (float)(RAND_MAX)) * 6.0f - 3.0f;
-		float zr = ((float)rand() / (float)(RAND_MAX)) * 3.0f - 1.5f;
-		float r1 = ((float)rand() / (float)(RAND_MAX));
-		float r2 = ((float)rand() / (float)(RAND_MAX)) - 0.5;
-		if (r2 < 0){
-			r2 = 0;
-		}
-		obj_list.push_back(new Sphere(Vec3(xr, -0.45, zr-2), 0.05, r1, r2));
-	}
+	// srand(12345);
+	// for (int i = 0; i < 48; i++) {
+	// 	float xr = ((float)rand() / (float)(RAND_MAX)) * 6.0f - 3.0f;
+	// 	float zr = ((float)rand() / (float)(RAND_MAX)) * 3.0f - 1.5f;
+	// 	float r1 = ((float)rand() / (float)(RAND_MAX));
+	// 	float r2 = ((float)rand() / (float)(RAND_MAX)) - 0.5;
+	// 	if (r2 < 0){
+	// 		r2 = 0;
+	// 	}
+	// 	obj_list.push_back(new Sphere(Vec3(xr, -0.45, zr-2), 0.05, r1, r2));
+	// }
 }
 
 void create_scene_lights(vector<Light> &lights){
