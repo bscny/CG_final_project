@@ -93,6 +93,11 @@ int main()
 				c = trace_color_ray(r, BOUNCE, obj_list, lights, -1);
 			}
 
+			// clamping
+			if(c[0] > 1) c[0] = 1;
+			if(c[1] > 1) c[1] = 1;
+			if(c[2] > 1) c[2] = 1;
+
 			file << int(c[0] * 255) << " " << int(c[1] * 255) << " " << int(c[2] * 255) << "\n";
 		}
 	}

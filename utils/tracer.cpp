@@ -81,13 +81,19 @@ Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list,
 	float occlude_lv = 0;
 
 	for(int i = 0; i < (int)lights.size(); i ++){
-		Vec3 L(unit_vector(lights[i].get_position() - P));
+		Vec3 light_pos = lights[i].get_position();
+		Vec3 L = unit_vector(light_pos - P);
+		// the distence from the point to the point light
+		float dist2 = dot(light_pos - P, light_pos - P);
+		float dist = sqrt(dist2);
+
+		float attenuation = 1.0f / (KC + KL * dist + KQ * dist2);
 
 		if(dot(N, L) < 0){
 			local_color += Vec3(0, 0, 0);
 		}else{
 			occlude_lv = trace_shadow_ray(Ray(P, L), sqrt(dot(lights[i].get_position() - P, lights[i].get_position() - P)), obj_list);
-			local_color += occlude_lv * dot(N, L) * lights[i].get_intensity();
+			local_color += occlude_lv * dot(N, L) * (attenuation * lights[i].get_intensity());
 		}
 	}
 

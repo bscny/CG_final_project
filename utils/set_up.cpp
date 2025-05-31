@@ -2,7 +2,6 @@
 #include "constant.h"
 using namespace std;
 
-
 void create_scene_objects(vector<Object *> &obj_list){
     // add floor
 	// obj_list.push_back(new Sphere(Vec3(0, -100.5, -2), 100));
@@ -11,7 +10,7 @@ void create_scene_objects(vector<Object *> &obj_list){
 
 	// add main sphere
 	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0, GLASS_N));
-	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.3, 0, WATER_N));
+	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.6, 0, WATER_N));
 	obj_list.push_back(new Sphere(Vec3(-1, 0, -2.25), 0.5, 0.8, 0, DIAMOND_N));
 
 	// add tetrahedron
@@ -39,8 +38,8 @@ void create_scene_objects(vector<Object *> &obj_list){
 
 void create_scene_lights(vector<Light> &lights){
     // set up lights
-	lights.push_back(Light(Vec3(-10, 10, 0), Vec3(0.5, 0, 0)));
-	lights.push_back(Light(Vec3(10, 10, 0), Vec3(0.25, 0.25, 0.5)));
-	lights.push_back(Light(Vec3(0, 10, 10), Vec3(0, 0.5, 0)));
-	lights.push_back(Light(Vec3(0, 10, -10), Vec3(0.25, 0.25, 0.5)));
+	lights.push_back(Light(Vec3(-10, 10, 0), Vec3(5, 0, 0)));
+	lights.push_back(Light(Vec3(10, 10, 0), Vec3(2.5, 2.5, 5)));
+	lights.push_back(Light(Vec3(0, 10, 10), Vec3(0, 5, 0)));
+	lights.push_back(Light(Vec3(0, 10, -10), Vec3(2.5, 2.5, 5)));
 }
