@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -Wall -Wextra -O2
+CXXFLAGS = -Wall -Wextra -O3 -pthread
 
 # Project root directory (relative to build directory)
 PROJECT_ROOT = ..
