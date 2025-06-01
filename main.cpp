@@ -4,16 +4,20 @@
 #include <cmath>
 #include <cstdlib>
 #include <thread>
+#include <random>
 // custom
 #include "tools/vec3.h"
 #include "tools/ray.h"
 #include "tools/object.h"
+
 #include "scene_objects/light.h"
 #include "scene_objects/sphere.h"
 #include "scene_objects/triangle.h"
 #include "scene_objects/mesh.h"
+
 #include "utils/tracer.h"
 #include "utils/set_up.h"
+
 #include "constant.h"
 
 using namespace std;
@@ -24,14 +28,35 @@ void render_chunk(int start_row, int end_row,
                  const vector<Object*>& obj_list, const vector<Light>& lights,
                  vector<vector<Vec3>>& image_buffer) {
     
+    // Thread-local random number generator for anti-aliasing
+    thread_local random_device rd;
+    thread_local mt19937 gen(rd());
+    thread_local uniform_real_distribution<float> dis(0.0f, 1.0f);
+    
     for (int j = start_row; j < end_row; j++) {
         for (int i = 0; i < WIDTH; i++) {
-            float ratio_h = float(i) / float(WIDTH);
-            float ratio_v = float(j) / float(HEIGHT);
-            Vec3 target_point = lower_left_corner + ratio_h * horizontal + ratio_v * vertical;
+            Vec3 c(0, 0, 0);
             
-            Ray r(origin, target_point - origin);
-            Vec3 c = trace_color_ray(r, BOUNCE, obj_list, lights, -1);
+            if (ANTI_ALIASING) {
+                // Take multiple samples per pixel for anti-aliasing
+                for (int s = 0; s < SAMPLES_PER_PIXAL; s++) {
+                    float u = ((float)i + dis(gen)) / float(WIDTH);
+                    float v = ((float)j + dis(gen)) / float(HEIGHT);
+                    Vec3 target_point = lower_left_corner + u * horizontal + v * vertical;
+                    
+                    Ray r(origin, target_point - origin);
+                    c += trace_color_ray(r, BOUNCE, obj_list, lights, -1);
+                }
+                c /= float(SAMPLES_PER_PIXAL);
+            } else {
+                // Single sample per pixel (no anti-aliasing)
+                float ratio_h = float(i) / float(WIDTH);
+                float ratio_v = float(j) / float(HEIGHT);
+                Vec3 target_point = lower_left_corner + ratio_h * horizontal + ratio_v * vertical;
+                
+                Ray r(origin, target_point - origin);
+                c = trace_color_ray(r, BOUNCE, obj_list, lights, -1);
+            }
             
             // Clamp colors
             if(c[0] > 1) c[0] = 1;
