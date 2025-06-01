@@ -130,7 +130,7 @@ int main() {
     
     file << "P3\n" << WIDTH << " " << HEIGHT << "\n255\n";
     
-    // Write image buffer to file (maintain your original row order)
+    // Write image buffer to file
     for (int j = HEIGHT - 1; j >= 0; j--) {
         for (int i = 0; i < WIDTH; i++) {
             Vec3 c = image_buffer[j][i];
