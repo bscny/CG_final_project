@@ -69,6 +69,27 @@ void render_chunk(int start_row, int end_row,
 }
 
 int main() {
+    // current coordinates: cam looking down in -z direction
+	//
+	//       Z
+	//       |            
+	//       |              
+	//       |_________ Y
+	//      /
+	//     /
+	//    X
+	//
+
+	// in cam: we have xy coordinates of this
+	//                  -z
+	//					/
+	//                 /
+	//		 Y
+	//		 |
+	//		 |
+	//		 |_________ X
+	//
+    
     // Camera params
     Vec3 lower_left_corner(-2, -1, -1);
     Vec3 origin(0, 0, 1);
