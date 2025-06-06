@@ -1,98 +1,136 @@
-#ifndef KDTREESPACE_H
-#define KDTREESPACE_H
+#ifndef KD_TREE_SIMPLE_H
+#define KD_TREE_SIMPLE_H
 
 #include <vector>
-#include <algorithm>
-#include <cmath>
 #include <limits>
+#include <cmath>
+#include <algorithm>
 
 template<typename T>
-struct Point3DSpace {
+struct Point3D {
     T x, y, z;
     
-    Point3DSpace();
-    Point3DSpace(T x_, T y_, T z_);
+    Point3D() : x(0), y(0), z(0) {}
+    Point3D(T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
     
-    T& operator[](int dim);
-    const T& operator[](int dim) const;
+    T& operator[](int dim) {
+        return (dim == 0) ? x : (dim == 1) ? y : z;
+    }
     
-    bool operator==(const Point3DSpace<T>& other) const;
+    const T& operator[](int dim) const {
+        return (dim == 0) ? x : (dim == 1) ? y : z;
+    }
+    
+    bool operator==(const Point3D<T>& other) const {
+        return x == other.x && y == other.y && z == other.z;
+    }
 };
 
 template<typename T>
 struct BoundingBox {
-    Point3DSpace<T> min, max;
+    Point3D<T> min, max;
     
-    BoundingBox();
-    BoundingBox(const Point3DSpace<T>& min_, const Point3DSpace<T>& max_);
+    BoundingBox() {}
+    BoundingBox(const Point3D<T>& min_, const Point3D<T>& max_) : min(min_), max(max_) {}
     
-    Point3DSpace<T> center() const;
-    T size(int dim) const;
-    bool contains(const Point3DSpace<T>& point) const;
-    bool intersects(const BoundingBox<T>& other) const;
-    bool intersectsSphere(const Point3DSpace<T>& center, T radius) const;
+    Point3D<T> center() const {
+        return Point3D<T>((min.x + max.x) / 2, (min.y + max.y) / 2, (min.z + max.z) / 2);
+    }
+    
+    T size(int dim) const {
+        return max[dim] - min[dim];
+    }
+    
+    bool contains(const Point3D<T>& point) const {
+        return point.x >= min.x && point.x <= max.x &&
+               point.y >= min.y && point.y <= max.y &&
+               point.z >= min.z && point.z <= max.z;
+    }
+    
+    bool intersects(const BoundingBox<T>& other) const {
+        return !(other.min.x > max.x || other.max.x < min.x ||
+                 other.min.y > max.y || other.max.y < min.y ||
+                 other.min.z > max.z || other.max.z < min.z);
+    }
+    
+    bool intersectsSphere(const Point3D<T>& center, T radius) const {
+        T distSq = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (center[i] < min[i]) {
+                T diff = min[i] - center[i];
+                distSq += diff * diff;
+            } else if (center[i] > max[i]) {
+                T diff = center[i] - max[i];
+                distSq += diff * diff;
+            }
+        }
+        return distSq <= radius * radius;
+    }
 };
 
 template<typename T>
-class KDTree3DSpace {
+class KDTreeSimple {
 private:
     struct Node {
         BoundingBox<T> bounds;
-        int dimension;  // splitting dimension (0=x, 1=y, 2=z)
-        T splitValue;   // predetermined split position
+        Point3D<T> point;      // The actual point stored in this node
+        bool hasPoint;         // Whether this node contains a point
+        int dimension;         // Split dimension (0=x, 1=y, 2=z)
+        T splitValue;          // Split value for this dimension
         Node* left;
         Node* right;
-        std::vector<Point3DSpace<T>> points;  // only used in leaf nodes
-        bool isLeaf;
         
-        Node(const BoundingBox<T>& bounds_, int dim, T split);
-        Node(const BoundingBox<T>& bounds_);  // leaf constructor
-        ~Node();
+        // Constructor for empty spatial node
+        Node(const BoundingBox<T>& bounds_, int dim, T split)
+            : bounds(bounds_), hasPoint(false), dimension(dim), splitValue(split), 
+              left(nullptr), right(nullptr) {}
+        
+        // Constructor for point-containing node
+        Node(const BoundingBox<T>& bounds_, const Point3D<T>& p, int dim, T split)
+            : bounds(bounds_), point(p), hasPoint(true), dimension(dim), splitValue(split),
+              left(nullptr), right(nullptr) {}
+        
+        ~Node() {
+            delete left;
+            delete right;
+        }
     };
     
     Node* root;
     BoundingBox<T> worldBounds;
     int maxDepth;
-    int maxPointsPerLeaf;
+    int currentSize;
     
-    // Private helper methods
     Node* createNode(const BoundingBox<T>& bounds, int depth);
-    void insertPoint(Node* node, const Point3DSpace<T>& point, int depth);
-    void nearestNeighborHelper(Node* node, const Point3DSpace<T>& target, 
-                              Point3DSpace<T>& best, T& bestDist) const;
+    void insertPoint(Node* node, const Point3D<T>& point, int depth);
+    void nearestNeighborHelper(Node* node, const Point3D<T>& target, 
+                             Point3D<T>& best, T& bestDist) const;
     void rangeSearchHelper(Node* node, const BoundingBox<T>& range,
-                          std::vector<Point3DSpace<T>>& result) const;
-    void radiusSearchHelper(Node* node, const Point3DSpace<T>& center, T radiusSquared,
-                           std::vector<Point3DSpace<T>>& result) const;
-    T distanceSquared(const Point3DSpace<T>& a, const Point3DSpace<T>& b) const;
-    T pointToBoxDistanceSquared(const Point3DSpace<T>& point, const BoundingBox<T>& box) const;
+                         std::vector<Point3D<T>>& result) const;
+    void radiusSearchHelper(Node* node, const Point3D<T>& center, T radiusSquared,
+                          std::vector<Point3D<T>>& result) const;
+    
+    T distanceSquared(const Point3D<T>& a, const Point3D<T>& b) const;
+    T pointToBoxDistanceSquared(const Point3D<T>& point, const BoundingBox<T>& box) const;
     int getDepth(Node* node) const;
-    int countNodes(Node* node) const;
-    
+    int countPoints(Node* node) const;
+
 public:
-    KDTree3DSpace(const Point3DSpace<T>& minBounds, const Point3DSpace<T>& maxBounds, 
-             int maxDepth_ = 10, int maxPointsPerLeaf_ = 8);
-    ~KDTree3DSpace();
+    KDTreeSimple(const Point3D<T>& minBounds, const Point3D<T>& maxBounds, int maxDepth_ = 20);
+    ~KDTreeSimple();
     
-    // Copy constructor and assignment operator (deleted for simplicity)
-    KDTree3DSpace(const KDTree3DSpace&) = delete;
-    KDTree3DSpace& operator=(const KDTree3DSpace&) = delete;
+    void insert(const Point3D<T>& point);
+    void insert(const std::vector<Point3D<T>>& points);
     
-    // Public interface
-    void insert(const Point3DSpace<T>& point);
-    void insert(const std::vector<Point3DSpace<T>>& points);
-    Point3DSpace<T> nearestNeighbor(const Point3DSpace<T>& target) const;
-    std::vector<Point3DSpace<T>> rangeSearch(const Point3DSpace<T>& min, const Point3DSpace<T>& max) const;
-    std::vector<Point3DSpace<T>> radiusSearch(const Point3DSpace<T>& center, T radius) const;
+    Point3D<T> nearestNeighbor(const Point3D<T>& target) const;
+    std::vector<Point3D<T>> rangeSearch(const Point3D<T>& min, const Point3D<T>& max) const;
+    std::vector<Point3D<T>> radiusSearch(const Point3D<T>& center, T radius) const;
+    
     bool empty() const;
-    int depth() const;
     int size() const;
+    int depth() const;
     void clear();
-    
-    // Debug information
     BoundingBox<T> getBounds() const;
-    int getMaxDepth() const;
-    int getMaxPointsPerLeaf() const;
 };
 
-#endif
+#endif // KD_TREE_SIMPLE_H
