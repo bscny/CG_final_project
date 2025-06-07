@@ -17,4 +17,11 @@
 #define   AIR_N        1.0
 #define   DIAMOND_N    2.42
 
+// Attenuation constants
+#define   KC   1.0
+// #define   KL   0.09
+#define   KL   1
+// #define   KQ   0.032
+#define   KQ   1.2
+
 #endif

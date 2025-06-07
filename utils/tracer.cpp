@@ -59,7 +59,7 @@ Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list,
 	// and https://physics.stackexchange.com/questions/435512/snells-law-in-vector-form
 	
 	// get the ratio of reflective index
-	float current_refractive_index;
+	/*float current_refractive_index;
 	float next_refractive_index;
 	if(in_obj_index == -1){
 		current_refractive_index = AIR_N;
@@ -75,35 +75,41 @@ Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list,
 	// the refraction ray
 	float eta = current_refractive_index / next_refractive_index;
 	float cos2 = sqrt(1 - pow(eta, 2) * (1 - pow(dot(N, r.Dir), 2)) );
-	Ray T(P, eta * r.Dir + (eta * dot(N, r.Dir) - cos2) * N );
+	Ray T(P, eta * r.Dir + (eta * dot(N, r.Dir) - cos2) * N );*/
 
 	Vec3 local_color;
 	float occlude_lv = 0;
 
 	for(int i = 0; i < (int)lights.size(); i ++){
-		Vec3 L(unit_vector(lights[i].get_position() - P));
+		Vec3 light_pos = lights[i].get_position();
+		Vec3 L = unit_vector(light_pos - P);
+		// the distence from the point to the point light
+		float dist2 = dot(light_pos - P, light_pos - P);
+		float dist = sqrt(dist2);
+
+		float attenuation = 1.0f / (KC + KL * dist + KQ * dist2);
 
 		if(dot(N, L) < 0){
 			local_color += Vec3(0, 0, 0);
 		}else{
 			occlude_lv = trace_shadow_ray(Ray(P, L), sqrt(dot(lights[i].get_position() - P, lights[i].get_position() - P)), obj_list);
-			local_color += occlude_lv * dot(N, L) * lights[i].get_intensity();
+			local_color += occlude_lv * dot(N, L) * (attenuation * lights[i].get_intensity());
 		}
 	}
 
 	Vec3 reflected_color;
-	Vec3 refracted_color;
+	// Vec3 refracted_color;
 
 	if(obj_list[record_index]->get_w_r() > 0.2){
 		reflected_color = trace_color_ray(R, bounce - 1, obj_list, lights, in_obj_index);
 	}
 
-	if(obj_list[record_index]->get_w_t() > 0.3){
+	/*if(obj_list[record_index]->get_w_t() > 0.3){
 		refracted_color = trace_color_ray(T, bounce - 1, obj_list, lights, record_index);
-	}
+	}*/
 
-	// return (1 - obj_list[record_index].get_w_r()) * local_color + obj_list[record_index].get_w_r() * reflected_color;
-	return (1 - obj_list[record_index]->get_w_t()) * 
+	return (1 - obj_list[record_index]->get_w_r()) * local_color + obj_list[record_index]->get_w_r() * reflected_color;
+	/*return (1 - obj_list[record_index]->get_w_t()) * 
 		   ( (1 - obj_list[record_index]->get_w_r()) * local_color + obj_list[record_index]->get_w_r() * reflected_color) +
-		   obj_list[record_index]->get_w_t() * refracted_color;
+		   obj_list[record_index]->get_w_t() * refracted_color;*/
 }
