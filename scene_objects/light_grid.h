@@ -32,6 +32,7 @@ struct Node {
 
     // getter
     Vec3 get_real_light_pos() const;
+    Vec3 get_intensity() const;
 };
 
 class LightGrid {
@@ -39,16 +40,23 @@ class LightGrid {
         LightGrid(Vec3 world_max_p, Vec3 world_min_p);
 
         void insert(Vec3 P, Vec3 I, Vec3 W, float weight);
+
+        // queries
         // Node nearest_neighbor(const Vec3 &target) const;  // TODO i dont think we need this api
         void range_search(std::vector<Node> &target_array, Vec3 max_bound, Vec3 min_bound) const;
         void radius_search(std::vector<Node> &target_array, Vec3 center, float radius) const;
 
+        // transform to a vector
+        void flat(std::vector<Node> &target_array) const;
+
         // getters
         int get_size() const;
+        int get_repeation() const;
         int get_depth() const;
     private:    
         Node *root;
         int size;
+        int repeation;
         int depth;
         Vec3 world_max_pos;
         Vec3 world_min_pos;
@@ -57,6 +65,7 @@ class LightGrid {
         void insert_recursive(Node *node, Vec3 P, Vec3 I, Vec3 W, float weight, int current_depth);
         void range_search_recursive(Node *node, std::vector<Node> &target_array, Vec3 max_bound, Vec3 min_bound) const;
         void radius_search_recursive(Node *node, std::vector<Node> &target_array, Vec3 center, float radius) const;
+        void inorder(Node *node, std::vector<Node> &target_array) const;
 };
 
 #endif

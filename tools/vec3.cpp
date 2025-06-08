@@ -134,7 +134,7 @@ Vec3 operator*(const Vec3 &v, float t)
 
 // Equality operators
 bool operator==(const Vec3 &v1, const Vec3 &v2) {
-    const float epsilon = 0.00001;
+    const float epsilon = 0.0000001;
     return (std::abs(v1.e[0] - v2.e[0]) < epsilon && 
             std::abs(v1.e[1] - v2.e[1]) < epsilon && 
             std::abs(v1.e[2] - v2.e[2]) < epsilon);

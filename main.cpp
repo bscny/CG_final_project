@@ -11,6 +11,7 @@
 #include "tools/object.h"
 
 #include "scene_objects/light.h"
+#include "scene_objects/light_grid.h"
 #include "scene_objects/sphere.h"
 #include "scene_objects/triangle.h"
 #include "scene_objects/mesh.h"
@@ -25,7 +26,7 @@ using namespace std;
 void render_chunk(int start_row, int end_row,
                  const Vec3& lower_left_corner, const Vec3& origin,
                  const Vec3& horizontal, const Vec3& vertical,
-                 const vector<Object*>& obj_list, const vector<Light>& lights,
+                 const vector<Object*>& obj_list, const vector<Node>& lights,
                  vector<vector<Vec3>>& image_buffer) {
     
     // Thread-local random number generator for anti-aliasing
@@ -101,7 +102,7 @@ int main() {
     create_scene_objects(obj_list);
     
     // Light params
-    vector<Light> lights;
+    vector<Node> lights;
     create_scene_lights(lights);
     
     // Image buffer to store results

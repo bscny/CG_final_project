@@ -21,7 +21,7 @@ float trace_shadow_ray(const Ray &r, float distance2light, const vector<Object *
 
 // for each ray, see the interaction with every scene objs
 Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list, 
-					 const vector<Light> &lights, int in_obj_index){
+					 const vector<Node> &lights, int in_obj_index){
 	if(bounce < 0){
 		return Vec3(0, 0, 0);
 	}
@@ -81,7 +81,7 @@ Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list,
 	float occlude_lv = 0;
 
 	for(int i = 0; i < (int)lights.size(); i ++){
-		Vec3 light_pos = lights[i].get_position();
+		Vec3 light_pos = lights[i].get_real_light_pos();
 		Vec3 L = unit_vector(light_pos - P);
 		// the distence from the point to the point light
 		float dist2 = dot(light_pos - P, light_pos - P);
@@ -92,7 +92,7 @@ Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list,
 		if(dot(N, L) < 0){
 			local_color += Vec3(0, 0, 0);
 		}else{
-			occlude_lv = trace_shadow_ray(Ray(P, L), sqrt(dot(lights[i].get_position() - P, lights[i].get_position() - P)), obj_list);
+			occlude_lv = trace_shadow_ray(Ray(P, L), sqrt(dot(lights[i].get_real_light_pos() - P, lights[i].get_real_light_pos() - P)), obj_list);
 			local_color += occlude_lv * dot(N, L) * (attenuation * lights[i].get_intensity());
 		}
 	}

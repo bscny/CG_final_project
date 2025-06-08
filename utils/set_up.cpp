@@ -60,8 +60,10 @@ void create_scene_objects(vector<Object *> &obj_list){
 	}
 }
 
-void create_scene_lights(vector<Light> &lights){
+void create_scene_lights(vector<Node> &lights){
     // set up lights
+	LightGrid lg(Vec3(1.5, 2, 1), Vec3(-1.5, 0, -6));
+
 	for (int i = 0; i < 1200; i++) {
 		float xr = get_random(-1.5, 1.5);
 		float zr = get_random(-6, 1);
@@ -71,22 +73,33 @@ void create_scene_lights(vector<Light> &lights){
 		float c = get_random(0, max_intensity);
 		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
-			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
+			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
+			lg.insert(Vec3(xr, yr, zr), Vec3(c, 0, 0), Vec3(0, 0, 0), 0);
 		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
 			// red + green
-			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
+			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
+			lg.insert(Vec3(xr, yr, zr), Vec3(c, c, 0), Vec3(0, 0, 0), 0);
 		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
 			// pure green
-			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
+			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
+			lg.insert(Vec3(xr, yr, zr), Vec3(0, c, 0), Vec3(0, 0, 0), 0);
 		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
 			// green + blue
-			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
+			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
+			lg.insert(Vec3(xr, yr, zr), Vec3(0, c, c), Vec3(0, 0, 0), 0);
 		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
 			// pure blue
-			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
+			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
+			lg.insert(Vec3(xr, yr, zr), Vec3(0, 0, c), Vec3(0, 0, 0), 0);
 		}else{
 			// red + blue
-			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, c)));
+			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, c)));
+			lg.insert(Vec3(xr, yr, zr), Vec3(c, 0, c), Vec3(0, 0, 0), 0);
 		}
 	}
+
+	lg.flat(lights);
+	cout << "num of node: " << lights.size() << endl;
+	cout << "num of repeation: " << lg.get_repeation() << endl;
+	cout << "tree depth: " << lg.get_depth() << endl;
 }

@@ -61,11 +61,15 @@ Node::Node(Vec3 max_p, Vec3 min_p, int dim) {
 
 // getters
 Vec3 Node::get_real_light_pos() const {
-    if(weight == 0){
-        return grid_pos;
+    if(weight > 0.00000001){
+        return wieghted_pos / weight;
     }
+    
+    return grid_pos;
+}
 
-    return wieghted_pos / weight;
+Vec3 Node::get_intensity() const {
+    return intensity;
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -74,6 +78,7 @@ LightGrid::LightGrid(Vec3 world_max_p, Vec3 world_min_p) {
     world_max_pos = world_max_p;
     world_min_pos = world_min_p;
     size = 0;
+    repeation = 0;
     depth = 0;
 
     // create empty root
@@ -104,6 +109,7 @@ void LightGrid::insert_recursive(Node *node, Vec3 P, Vec3 I, Vec3 W, float weigh
         node->wieghted_pos += W;
         node->weight += weight;
 
+        repeation ++;
         return;
     }
 
@@ -224,9 +230,27 @@ void LightGrid::radius_search_recursive(Node *node, std::vector<Node> &target_ar
     if (node->right) radius_search_recursive(node->right, target_array, center, radius);
 }
 
+// transform
+void LightGrid::flat(vector<Node> &target_array) const {
+    target_array.clear();
+    inorder(root, target_array);
+}
+
+void LightGrid::inorder(Node *node, vector<Node> &target_array) const {
+    if (node && node->has_light) {
+        inorder(node->left, target_array);
+        target_array.push_back(*node);
+        inorder(node->right, target_array);
+    }
+}
+
 // getters
 int LightGrid::get_size() const {
     return size;
+}
+
+int LightGrid::get_repeation() const {
+    return repeation;
 }
 
 int LightGrid::get_depth() const {
