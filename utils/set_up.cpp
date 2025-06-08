@@ -2,6 +2,7 @@
 
 #include "set_up.h"
 #include "constant.h"
+#include "utils/insert_lg.h"
 using namespace std;
 
 float get_random(float lower, float upper) {
@@ -60,10 +61,7 @@ void create_scene_objects(vector<Object *> &obj_list){
 	}
 }
 
-void create_scene_lights(vector<Node> &lights){
-    // set up lights
-	LightGrid lg(Vec3(1.5, 2, 1), Vec3(-1.5, 0, -6));
-
+void create_scene_lights(vector<Light> &lights){
 	for (int i = 0; i < 1200; i++) {
 		float xr = get_random(-1.5, 1.5);
 		float zr = get_random(-6, 1);
@@ -73,33 +71,74 @@ void create_scene_lights(vector<Node> &lights){
 		float c = get_random(0, max_intensity);
 		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
-			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
-			lg.insert(Vec3(xr, yr, zr), Vec3(c, 0, 0), Vec3(0, 0, 0), 0);
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
 		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
 			// red + green
-			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
-			lg.insert(Vec3(xr, yr, zr), Vec3(c, c, 0), Vec3(0, 0, 0), 0);
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
 		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
 			// pure green
-			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
-			lg.insert(Vec3(xr, yr, zr), Vec3(0, c, 0), Vec3(0, 0, 0), 0);
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
 		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
 			// green + blue
-			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
-			lg.insert(Vec3(xr, yr, zr), Vec3(0, c, c), Vec3(0, 0, 0), 0);
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
 		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
 			// pure blue
-			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
-			lg.insert(Vec3(xr, yr, zr), Vec3(0, 0, c), Vec3(0, 0, 0), 0);
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
 		}else{
 			// red + blue
-			// lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, c)));
-			lg.insert(Vec3(xr, yr, zr), Vec3(c, 0, c), Vec3(0, 0, 0), 0);
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, c)));
 		}
 	}
+}
 
-	lg.flat(lights);
-	cout << "num of node: " << lights.size() << endl;
-	cout << "num of repeation: " << lg.get_repeation() << endl;
-	cout << "tree depth: " << lg.get_depth() << endl;
+void create_scene_light_grids(vector<LightGrid> &lgs) {
+	lgs.clear();
+
+	// create all levels of lg
+	int lv_num = 3;
+	for (int i = 0; i <= lv_num; i ++) {
+		lgs.push_back(LightGrid(Vec3(1.5, 2, 1), Vec3(-1.5, 0, -6)));
+	}
+
+	// creating VPL
+	for (int i = 0; i < 1200; i++) {
+		float xr = get_random(-1.5, 1.5);
+		float zr = get_random(-6, 1);
+		float yr = get_random(0, 2);
+		Vec3 I;
+
+		float max_intensity = 0.05f;
+		float c = get_random(0, max_intensity);
+		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
+			// pure red
+			I = Vec3(c, 0, 0);
+		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
+			// red + green
+			I = Vec3(c, c, 0);
+		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
+			// pure green
+			I = Vec3(0, c, 0);
+		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
+			// green + blue
+			I = Vec3(0, c, c);
+		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
+			// pure blue
+			I = Vec3(0, 0, c);
+		}else{
+			// red + blue
+			I = Vec3(c, 0, c);
+		}
+
+		// get the influenced grid vertices for this light at each lv
+		for (int i = 0; i <= lv_num; i ++) {
+			insert_influenced_grid_vertices(lgs[i], Vec3(xr, yr, zr), I, Vec3(-1.5, 0, -6), H * pow(2, i));
+		} 
+	}
+
+	for (int i = 0; i <= lv_num; i ++) {
+		cout << "for grid lv of: " << i << endl;
+		cout << "	num of node: " << lgs[i].get_size() << endl;
+		cout << "	num of repeation: " << lgs[i].get_repeation() << endl;
+		cout << "	tree depth: " << lgs[i].get_depth() << endl;
+	}
 }

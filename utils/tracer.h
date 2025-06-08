@@ -13,6 +13,10 @@ using namespace std;
 
 float trace_shadow_ray(const Ray &r, float distance2light, const vector<Object *> &obj_list);
 
-Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<Node> &lights, int in_obj_index);
+float blending(int max_lv, int curr_lv, float d, float r);
+
+Vec3 trace_color_ray(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<Light> &lights, int in_obj_index);
+
+Vec3 trace_color_ray_lg(const Ray &r, int bounce, const vector<Object *> &obj_list, const vector<LightGrid> &lgs, int in_obj_index);
 
 #endif

@@ -3,5 +3,6 @@ test.cpp
 
 # in case someone forget to make clean
 main
+original
 single_thread_main
 obj

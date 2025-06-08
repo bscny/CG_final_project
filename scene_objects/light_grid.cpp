@@ -72,6 +72,10 @@ Vec3 Node::get_intensity() const {
     return intensity;
 }
 
+Vec3 Node::get_grid_vertex_pos() const {
+    return grid_pos;
+}
+
 // --------------------------------------------------------------------------------------------------
 
 LightGrid::LightGrid(Vec3 world_max_p, Vec3 world_min_p) {

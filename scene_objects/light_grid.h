@@ -33,6 +33,7 @@ struct Node {
     // getter
     Vec3 get_real_light_pos() const;
     Vec3 get_intensity() const;
+    Vec3 get_grid_vertex_pos() const;
 };
 
 class LightGrid {
