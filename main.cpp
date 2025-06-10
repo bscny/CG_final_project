@@ -11,6 +11,7 @@
 #include "tools/object.h"
 
 #include "scene_objects/light.h"
+#include "scene_objects/light_grid.h"
 #include "scene_objects/sphere.h"
 #include "scene_objects/triangle.h"
 #include "scene_objects/mesh.h"
@@ -25,7 +26,7 @@ using namespace std;
 void render_chunk(int start_row, int end_row,
                  const Vec3& lower_left_corner, const Vec3& origin,
                  const Vec3& horizontal, const Vec3& vertical,
-                 const vector<Object*>& obj_list, const vector<Light>& lights,
+                 const vector<Object*>& obj_list, const vector<LightGrid>& lgs,
                  vector<vector<Vec3>>& image_buffer) {
     
     // Thread-local random number generator for anti-aliasing
@@ -45,7 +46,7 @@ void render_chunk(int start_row, int end_row,
                     Vec3 target_point = lower_left_corner + u * horizontal + v * vertical;
                     
                     Ray r(origin, target_point - origin);
-                    c += trace_color_ray(r, BOUNCE, obj_list, lights, -1);
+                    c += trace_color_ray_lg(r, BOUNCE, obj_list, lgs, -1);
                 }
                 c /= float(SAMPLES_PER_PIXAL);
             } else {
@@ -55,7 +56,7 @@ void render_chunk(int start_row, int end_row,
                 Vec3 target_point = lower_left_corner + ratio_h * horizontal + ratio_v * vertical;
                 
                 Ray r(origin, target_point - origin);
-                c = trace_color_ray(r, BOUNCE, obj_list, lights, -1);
+                c = trace_color_ray_lg(r, BOUNCE, obj_list, lgs, -1);
             }
             
             // Clamp colors
@@ -101,8 +102,8 @@ int main() {
     create_scene_objects(obj_list);
     
     // Light params
-    vector<Light> lights;
-    create_scene_lights(lights);
+    vector<LightGrid> lgs;
+    create_scene_light_grids(lgs);
     
     // Image buffer to store results
     vector<vector<Vec3>> image_buffer(HEIGHT, vector<Vec3>(WIDTH));
@@ -133,7 +134,7 @@ int main() {
         
         threads.emplace_back(render_chunk, start_row, end_row,
                            lower_left_corner, origin, horizontal, vertical,
-                           cref(obj_list), cref(lights), ref(image_buffer));
+                           cref(obj_list), cref(lgs), ref(image_buffer));
     }
     
     // Wait for all threads to complete
@@ -144,9 +145,9 @@ int main() {
     // Write results to file
     fstream file;
     if (ANTI_ALIASING) {
-        file.open("../images/result.ppm", ios::out);
+        file.open("../images/light_grid.ppm", ios::out);
     } else {
-        file.open("../images/result_no_anti_aliasing.ppm", ios::out);
+        file.open("../images/light_grid_no_anti_aliasing.ppm", ios::out);
     }
     
     file << "P3\n" << WIDTH << " " << HEIGHT << "\n255\n";

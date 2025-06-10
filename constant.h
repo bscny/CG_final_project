@@ -24,4 +24,8 @@
 // #define   KQ   0.032
 #define   KQ   1.2
 
+// define light grid alpha for blending function
+#define   ALPHA   1
+#define   H   0.0625
+
 #endif
