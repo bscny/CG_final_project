@@ -135,16 +135,20 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<float> &bounds) {
 	lgs.clear();
 
 	// create all levels of lg
-	int lv_num = 3;
-	for (int i = 0; i <= lv_num; i ++) {
-		lgs.push_back(LightGrid(Vec3(1.5, 2, 1), Vec3(-1.5, 0, -6)));
-	}
+    Vec3 grid_max(bounds[5], bounds[1], bounds[3]);  // right_bound, ceiling_bound, front_bound
+    Vec3 grid_min(bounds[4], bounds[0], bounds[2]);  // left_bound, floor_bound, back_bound
+
+    // create all levels of lg
+    int lv_num = 3;
+    for (int i = 0; i <= lv_num; i ++) {
+        lgs.push_back(LightGrid(grid_max, grid_min));  // 使用動態計算的邊界
+    }
 
 	// creating VPL
 	for (int i = 0; i < 50; i++) {
-		float xr = get_random(bounds[5] + 1, bounds[4] - 1);
-		float yr = get_random(bounds[0] + 1, bounds[1] - 1);
-		float zr = get_random(bounds[2] , bounds[3]);
+		float xr = get_random(-1.5, 1.5);
+		float zr = get_random(-6, 1);
+		float yr = get_random(0, 2);
 		Vec3 I;
 
 		float max_intensity = 0.25f;
