@@ -39,8 +39,6 @@ vector<float> create_box(vector<Object *> &obj_list, vector<Vec3> &camera_positi
 
 	float floor_bound = standard.y() - height / 2;
 	float ceiling_bound = standard.y() + height /2;
-	// float floor_bound = standard.y() - 0.55;
-	// float ceiling_bound = standard.y() + height - 0.55;
 	float back_bound = standard.z() - depth / 2;
 	float front_bound = standard.z() + depth / 2;
 	float left_bound = standard.x() - width / 2;
@@ -106,7 +104,7 @@ void create_scene_objects(vector<Object *> &obj_list, vector<float> &bounds){
 
 
 void create_scene_lights(vector<Light> &lights){
-	for (int i = 0; i < 1200; i++) {
+	for (int i = 0; i < 50; i++) {
 		float xr = get_random(-1.5, 1.5);
 		float zr = get_random(-6, 1);
 		float yr = get_random(0, 2);
@@ -145,13 +143,13 @@ void create_scene_light_grids(vector<LightGrid> &lgs) {
 	}
 
 	// creating VPL
-	for (int i = 0; i < 1200; i++) {
+	for (int i = 0; i < 50; i++) {
 		float xr = get_random(-1.5, 1.5);
 		float zr = get_random(-6, 1);
 		float yr = get_random(0, 2);
 		Vec3 I;
 
-		float max_intensity = 0.05f;
+		float max_intensity = 0.25f;
 		float c = get_random(0, max_intensity);
 		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
@@ -185,4 +183,10 @@ void create_scene_light_grids(vector<LightGrid> &lgs) {
 		cout << "	num of repeation: " << lgs[i].get_repeation() << endl;
 		cout << "	tree depth: " << lgs[i].get_depth() << endl;
 	}
+}
+
+
+void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position) {
+	vector<float> bounds = create_box(obj_list, camera_position);
+	create_scene_objects(obj_list, bounds);
 }

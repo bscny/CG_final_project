@@ -98,7 +98,7 @@ int main() {
     
     // Scene object params
     vector<Object*> obj_list;
-    create_scene_objects(obj_list);
+    // create_scene_objects(obj_list);
     
     // Light params
     vector<Light> lights;
