@@ -4,7 +4,7 @@
 
 #include "set_up.h"
 #include "constant.h"
-
+#include "utils/insert_lg.h"
 using namespace std;
 
 float get_random(float lower, float upper) {
@@ -106,8 +106,7 @@ void create_scene_objects(vector<Object *> &obj_list, vector<float> &bounds){
 
 
 void create_scene_lights(vector<Light> &lights){
-    // set up lights
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 1200; i++) {
 		float xr = get_random(-1.5, 1.5);
 		float zr = get_random(-6, 1);
 		float yr = get_random(0, 2);
@@ -136,8 +135,54 @@ void create_scene_lights(vector<Light> &lights){
 	}
 }
 
-void create_scene(vector<Object *> &obj_list, vector<Light> &lights, vector<Vec3> &camera_position){
-	vector<float> bounds = create_box(obj_list, camera_position);
-	create_scene_objects(obj_list, bounds);
-	create_scene_lights(lights);
+void create_scene_light_grids(vector<LightGrid> &lgs) {
+	lgs.clear();
+
+	// create all levels of lg
+	int lv_num = 3;
+	for (int i = 0; i <= lv_num; i ++) {
+		lgs.push_back(LightGrid(Vec3(1.5, 2, 1), Vec3(-1.5, 0, -6)));
+	}
+
+	// creating VPL
+	for (int i = 0; i < 1200; i++) {
+		float xr = get_random(-1.5, 1.5);
+		float zr = get_random(-6, 1);
+		float yr = get_random(0, 2);
+		Vec3 I;
+
+		float max_intensity = 0.05f;
+		float c = get_random(0, max_intensity);
+		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
+			// pure red
+			I = Vec3(c, 0, 0);
+		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
+			// red + green
+			I = Vec3(c, c, 0);
+		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
+			// pure green
+			I = Vec3(0, c, 0);
+		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
+			// green + blue
+			I = Vec3(0, c, c);
+		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
+			// pure blue
+			I = Vec3(0, 0, c);
+		}else{
+			// red + blue
+			I = Vec3(c, 0, c);
+		}
+
+		// get the influenced grid vertices for this light at each lv
+		for (int i = 0; i <= lv_num; i ++) {
+			insert_influenced_grid_vertices(lgs[i], Vec3(xr, yr, zr), I, Vec3(-1.5, 0, -6), H * pow(2, i));
+		} 
+	}
+
+	for (int i = 0; i <= lv_num; i ++) {
+		cout << "for grid lv of: " << i << endl;
+		cout << "	num of node: " << lgs[i].get_size() << endl;
+		cout << "	num of repeation: " << lgs[i].get_repeation() << endl;
+		cout << "	tree depth: " << lgs[i].get_depth() << endl;
+	}
 }
