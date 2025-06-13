@@ -141,7 +141,7 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<float> &bounds) {
     // create all levels of lg
     int lv_num = 3;
     for (int i = 0; i <= lv_num; i ++) {
-        lgs.push_back(LightGrid(grid_max, grid_min));  // 使用動態計算的邊界
+        lgs.push_back(LightGrid(grid_max, grid_min));  
     }
 
 	// creating VPL
