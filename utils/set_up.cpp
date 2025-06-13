@@ -16,7 +16,7 @@ float get_random(float lower, float upper) {
 }
 
 
-void create_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
+vector<float> create_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
 	// box size
 	float width = 4.0f;	//x-axis  left and right
 	float height = 4.0f;  //y-axis  up and down
@@ -46,6 +46,8 @@ void create_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
 	float left_bound = standard.x() - width / 2;
 	float right_bound = standard.x() + width / 2;
 
+	vector<float> bounds = {floor_bound, ceiling_bound, back_bound, 
+							front_bound, left_bound, right_bound};
 	// add floor 
 	
 	obj_list.push_back(new Triangle(Vec3(-max_size, floor_bound, max_size), Vec3(max_size, floor_bound, max_size), Vec3(-max_size, floor_bound, -max_size), 0, 0));
@@ -68,9 +70,10 @@ void create_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
 	obj_list.push_back(new Triangle(Vec3(right_bound, max_size, max_size), Vec3(right_bound, max_size, -max_size), Vec3(right_bound, -max_size, -max_size), 0, 0));
 	obj_list.push_back(new Triangle(Vec3(right_bound, -max_size, -max_size), Vec3(right_bound, -max_size, max_size), Vec3(right_bound, max_size, max_size), 0, 0));
 
+	return bounds;
 }
 
-void create_scene_objects(vector<Object *> &obj_list){
+void create_scene_objects(vector<Object *> &obj_list, vector<float> &bounds){
 
 	// add main sphere
 	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0, GLASS_N));
@@ -86,16 +89,18 @@ void create_scene_objects(vector<Object *> &obj_list){
 
 	add_tetrahedron(obj_list, v1, v2, v3, v4, 0, 0);*/
 
+	
 	// add random objs
 	for (int i = 0; i < 40; i++) {
-		float xr = get_random(-2, 2);
-		float zr = get_random(-1.5, 1.5);
-		float r1 = get_random(0, 1);
+		float xr = get_random(bounds[5] + 1, bounds[4] - 1);
+		float yr = get_random(bounds[0] + 1, bounds[1] - 1);
+		float zr = get_random(bounds[2] , bounds[3]);
+		float r1 = get_random(-1, 1);
 		// float r2 = get_random(0, 1) - 0.5;
 		// if (r2 < 0){
 		// 	r2 = 0;
 		// }
-		obj_list.push_back(new Sphere(Vec3(xr, -0.45, zr-2), 0.05, r1, 0));
+		obj_list.push_back(new Sphere(Vec3(xr, yr, zr-2), 0.05, r1, 0));
 	}
 }
 
@@ -132,7 +137,7 @@ void create_scene_lights(vector<Light> &lights){
 }
 
 void create_scene(vector<Object *> &obj_list, vector<Light> &lights, vector<Vec3> &camera_position){
-	create_box(obj_list, camera_position);
-	create_scene_objects(obj_list);
+	vector<float> bounds = create_box(obj_list, camera_position);
+	create_scene_objects(obj_list, bounds);
 	create_scene_lights(lights);
 }
