@@ -16,12 +16,11 @@ float get_random(float lower, float upper) {
 }
 
 
-vector<float> create_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
-	// box size
-	float width = 4.0f;	//x-axis  left and right
-	float height = 4.0f;  //y-axis  up and down
-	float depth = 5.0f;   //z-axis  front and back
-	float max_size = 100.0f; // max size of the box
+vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
+	float distance_to_screen = 1.0f;
+	float width = 4.0f;
+	float height = 2.0f;
+	float depth = 6.0f;
 
 	// camera parameters
 	// Vec3 lower_left_corner(-2, -1, -1);
@@ -34,42 +33,24 @@ vector<float> create_box(vector<Object *> &obj_list, vector<Vec3> &camera_positi
     Vec3 vertical = camera_position[3];          
 
 	Vec3 standard = Vec3(lower_left_corner.x() + horizontal.x() / 2, 
-						lower_left_corner.y() + vertical.y() / 2, 
-						lower_left_corner.z() );
+						 lower_left_corner.y() + vertical.y() / 2, 
+						 lower_left_corner.z() + distance_to_screen);
 
-	float floor_bound = standard.y() - height / 2;
-	float ceiling_bound = standard.y() + height /2;
-	float back_bound = standard.z() - depth / 2;
-	float front_bound = standard.z() + depth / 2;
-	float left_bound = standard.x() - width / 2;
-	float right_bound = standard.x() + width / 2;
-	vector<float> bounds = {floor_bound, ceiling_bound, back_bound, front_bound, left_bound, right_bound};
-	
-	// add floor 
-	obj_list.push_back(new Triangle(Vec3(-max_size, floor_bound, max_size), Vec3(max_size, floor_bound, max_size), Vec3(-max_size, floor_bound, -max_size), 0, 0));
-	obj_list.push_back(new Triangle(Vec3(max_size, floor_bound, max_size), Vec3(max_size, floor_bound, -max_size), Vec3(-max_size, floor_bound, -max_size), 0, 0));
-	
-	// add ceiling
-	obj_list.push_back(new Triangle(Vec3(-max_size, ceiling_bound, -max_size), Vec3(max_size, ceiling_bound, -max_size), Vec3(-max_size, ceiling_bound, max_size), 0, 0));
-	obj_list.push_back(new Triangle(Vec3(max_size, ceiling_bound, -max_size), Vec3(max_size, ceiling_bound, max_size), Vec3(-max_size, ceiling_bound, max_size), 0, 0));
+	// top right, bottom left
+	Vec3 top_right = Vec3(standard.x() + width / 2, 
+						  standard.y() + height / 2, 
+						  standard.z() + depth / 2);
 
-	// add walls on the back
-	obj_list.push_back(new Triangle(Vec3(max_size, max_size, back_bound), Vec3(-max_size, max_size, back_bound), Vec3(-max_size, -max_size, back_bound), 0, 0));
-	obj_list.push_back(new Triangle(Vec3(-max_size, -max_size, back_bound), Vec3(max_size, -max_size, back_bound), Vec3(max_size, max_size, back_bound), 0, 0));
-	// add walls on the front
-	obj_list.push_back(new Triangle(Vec3(-max_size, max_size, front_bound), Vec3(max_size, max_size, front_bound), Vec3(max_size, -max_size, front_bound), 0, 0));
-	obj_list.push_back(new Triangle(Vec3(max_size, -max_size, front_bound), Vec3(-max_size, -max_size, front_bound), Vec3(-max_size, max_size, front_bound), 0, 0));
-	// add walls on the left
-	obj_list.push_back(new Triangle(Vec3(left_bound, max_size, -max_size), Vec3(left_bound, max_size, max_size), Vec3(left_bound, -max_size, max_size), 0, 0));
-	obj_list.push_back(new Triangle(Vec3(left_bound, -max_size, max_size), Vec3(left_bound, -max_size, -max_size), Vec3(left_bound, max_size, -max_size), 0, 0));
-	// add walls on the right
-	obj_list.push_back(new Triangle(Vec3(right_bound, max_size, max_size), Vec3(right_bound, max_size, -max_size), Vec3(right_bound, -max_size, -max_size), 0, 0));
-	obj_list.push_back(new Triangle(Vec3(right_bound, -max_size, -max_size), Vec3(right_bound, -max_size, max_size), Vec3(right_bound, max_size, max_size), 0, 0));
+	Vec3 bottom_left = Vec3(standard.x() - width / 2,
+						  standard.y() - height / 2, 
+						  standard.z() - depth / 2);
+
+	vector<Vec3> bounds = {top_right, bottom_left};
 
 	return bounds;
 }
 
-void create_scene_objects(vector<Object *> &obj_list, vector<float> &bounds){
+void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 
 	// add main sphere
 	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0, GLASS_N));
@@ -88,9 +69,9 @@ void create_scene_objects(vector<Object *> &obj_list, vector<float> &bounds){
 	
 	// add random objs
 	for (int i = 0; i < 40; i++) {
-		float xr = get_random(bounds[5] + 1, bounds[4] - 1);
-		float yr = get_random(bounds[0] + 1, bounds[1] - 1);
-		float zr = get_random(bounds[2] , bounds[3]);
+		float xr = get_random(bounds[1].x(), bounds[0].x());
+		float yr = get_random(bounds[1].y(), bounds[0].y());
+		float zr = get_random(bounds[1].z(), bounds[0].z());
 		float r1 = get_random(-1, 1);
 		// float r2 = get_random(0, 1) - 0.5;
 		// if (r2 < 0){
@@ -101,11 +82,11 @@ void create_scene_objects(vector<Object *> &obj_list, vector<float> &bounds){
 }
 
 
-void create_scene_lights(vector<Light> &lights, vector<float> &bounds) {
+void create_scene_lights(vector<Light> &lights, vector<Vec3> &bounds) {
 	for (int i = 0; i < 50; i++) {
-		float xr = get_random(bounds[5] + 1, bounds[4] - 1);
-		float yr = get_random(bounds[0] + 1, bounds[1] - 1);
-		float zr = get_random(bounds[2] , bounds[3]);
+		float xr = get_random(bounds[1].x(), bounds[0].x());
+		float yr = get_random(bounds[1].y(), bounds[0].y());
+		float zr = get_random(bounds[1].z(), bounds[0].z());
 
 		float max_intensity = 0.25f;
 		float c = get_random(0, max_intensity);
@@ -131,27 +112,25 @@ void create_scene_lights(vector<Light> &lights, vector<float> &bounds) {
 	}
 }
 
-void create_scene_light_grids(vector<LightGrid> &lgs, vector<float> &bounds) {
+void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 	lgs.clear();
 
 	// create all levels of lg
-    Vec3 grid_max(bounds[5], bounds[1], bounds[3]);  // right_bound, ceiling_bound, front_bound
-    Vec3 grid_min(bounds[4], bounds[0], bounds[2]);  // left_bound, floor_bound, back_bound
-
-    // create all levels of lg
-    int lv_num = 3;
-    for (int i = 0; i <= lv_num; i ++) {
-        lgs.push_back(LightGrid(grid_max, grid_min));  
-    }
+	int lv_num = 3;
+	for (int i = 0; i <= lv_num; i ++) {
+		// top right, bottom left
+		lgs.push_back(LightGrid(Vec3(bounds[0].x(), bounds[0].y(), bounds[0].z()), 
+								Vec3(bounds[1].x(), bounds[1].y(), bounds[1].z())));
+	}
 
 	// creating VPL
 	for (int i = 0; i < 50; i++) {
-		float xr = get_random(-1.5, 1.5);
-		float zr = get_random(-6, 1);
-		float yr = get_random(0, 2);
+		float xr = get_random(bounds[1].x(), bounds[0].x());
+		float yr = get_random(bounds[1].y(), bounds[0].y());
+		float zr = get_random(bounds[1].z(), bounds[0].z());
 		Vec3 I;
 
-		float max_intensity = 0.25f;
+		float max_intensity = 0.15f;
 		float c = get_random(0, max_intensity);
 		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
@@ -189,14 +168,14 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<float> &bounds) {
 
 // for light grid
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<LightGrid> &lgs) {
-	vector<float> bounds = create_box(obj_list, camera_position);
+	vector<Vec3> bounds = create_bounded_box(obj_list, camera_position);
 	create_scene_objects(obj_list, bounds);
 	create_scene_light_grids(lgs, bounds);
 }
 
 // for light
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<Light> &lights) {
-	vector<float> bounds = create_box(obj_list, camera_position);
+	vector<Vec3> bounds = create_bounded_box(obj_list, camera_position);
 	create_scene_objects(obj_list, bounds);
 	create_scene_lights(lights, bounds);
 }
