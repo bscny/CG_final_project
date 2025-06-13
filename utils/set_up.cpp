@@ -54,9 +54,9 @@ void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
 	float height = 5.0f;
 	float depth = 8.0f;
 	float maxlength = 100.0f;
-	Vec3 center = Vec3(bounds[0].x() + bounds[1].x(), 
-					   bounds[0].y() + bounds[1].y(), 
-					   bounds[0].z());
+	// Vec3 center = Vec3(bounds[0].x() + bounds[1].x(), 
+	// 				   bounds[0].y() + bounds[1].y(), 
+	// 				   bounds[0].z());
 
 	// add the scene container
 	// add floor
@@ -82,36 +82,41 @@ void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
 
 
 	// add random small boxes
-	// for (int i = 0; i < 20; i++) {
-	// 	float length = 1.0f;
+	// ToDo: face have some problems
+	// Mr.Yu give me some hints please!
+	// for (int i = 0; i < 10; i++) {
+	// 	float length = 0.5f;
+	// 	// bottom left corner
 	// 	float xr = get_random(bounds[1].x() + 1, bounds[0].x() - 1);
 	// 	float yr = get_random(bounds[1].y() + 1, bounds[0].y() - 1);
 	// 	float zr = get_random(bounds[1].z() + 1, bounds[0].z() - 1);
-	// 	// add floor
-	// 	obj_list.push_back(new Triangle(Vec3(-maxlength, bounds[1].y(), maxlength), Vec3(maxlength, bounds[1].y(), maxlength), Vec3(-maxlength, bounds[1].y(), -maxlength), 0, 0));
-	// 	obj_list.push_back(new Triangle(Vec3(maxlength, bounds[1].y(), maxlength), Vec3(maxlength, bounds[1].y(), -maxlength), Vec3(-maxlength, bounds[1].y(), -maxlength), 0, 0));
-	// 	// add ceiling
-	// 	obj_list.push_back(new Triangle(Vec3(-maxlength, bounds[0].y(), -maxlength), Vec3(maxlength, bounds[0].y(), -maxlength), Vec3(-maxlength, bounds[0].y(), maxlength), 0, 0));
-	// 	obj_list.push_back(new Triangle(Vec3(maxlength, bounds[0].y(), -maxlength), Vec3(maxlength, bounds[0].y(), maxlength), Vec3(-maxlength, bounds[0].y(), maxlength), 0, 0));
+	// 	// top right corner
+	// 	float xr2 = xr + length;
+	// 	float yr2 = yr + length;
+	// 	float zr2 = zr + length;
 
-	// 	// add walls on the back
-	// 	obj_list.push_back(new Triangle(Vec3(maxlength, maxlength, bounds[1].z()), Vec3(-maxlength, maxlength, bounds[1].z()), Vec3(-maxlength, -maxlength, bounds[1].z()), 0, 0));
-	// 	obj_list.push_back(new Triangle(Vec3(-maxlength, -maxlength, bounds[1].z()), Vec3(maxlength, -maxlength, bounds[1].z()), Vec3(maxlength, maxlength, bounds[1].z()), 0, 0));
-	// 	// add walls on the front
-	// 	obj_list.push_back(new Triangle(Vec3(-maxlength, maxlength, bounds[0].z()), Vec3(maxlength, maxlength, bounds[0].z()), Vec3(maxlength, -maxlength, bounds[0].z()), 0, 0));
-	// 	obj_list.push_back(new Triangle(Vec3(maxlength, -maxlength, bounds[0].z()), Vec3(-maxlength, -maxlength, bounds[0].z()), Vec3(-maxlength, maxlength, bounds[0].z()), 0, 0));
-		
-	// 	// add walls on the left
-	// 	obj_list.push_back(new Triangle(Vec3(bounds[1].x(), maxlength, -maxlength), Vec3(bounds[1].x(), maxlength, maxlength), Vec3(bounds[1].x(), -maxlength, maxlength), 0, 0));
-	// 	obj_list.push_back(new Triangle(Vec3(bounds[1].x(), -maxlength, maxlength), Vec3(bounds[1].x(), -maxlength, -maxlength), Vec3(bounds[1].x(), maxlength, -maxlength), 0, 0));
-	// 	// add walls on the right
-	// 	obj_list.push_back(new Triangle(Vec3(bounds[0].x(), maxlength, maxlength), Vec3(bounds[0].x(), maxlength, -maxlength), Vec3(bounds[0].x(), -maxlength, -maxlength), 0, 0));
-	// 	obj_list.push_back(new Triangle(Vec3(bounds[0].x(), -maxlength, -maxlength), Vec3(bounds[0].x(), -maxlength, maxlength), Vec3(bounds[0].x(), maxlength, maxlength), 0, 0));
-
+	// 	// bottom face
+	// 	obj_list.push_back(new Triangle(Vec3(xr, yr, zr), Vec3(xr2, yr, zr2), Vec3(xr, yr, zr), 0, 0));
+	// 	obj_list.push_back(new Triangle(Vec3(xr2, yr, zr2), Vec3(xr2, yr, zr), Vec3(xr, yr, zr), 0, 0));
+	// 	// top face
+	// 	obj_list.push_back(new Triangle(Vec3(xr, yr2, zr), Vec3(xr2, yr2, zr), Vec3(xr, yr2, zr2), 0, 0));
+	// 	obj_list.push_back(new Triangle(Vec3(xr2, yr2, zr), Vec3(xr2, yr2, zr2), Vec3(xr, yr2, zr2), 0, 0));
+	// 	// back face
+	// 	obj_list.push_back(new Triangle(Vec3(xr2, yr2, zr), Vec3(xr, yr2, zr), Vec3(xr, yr, zr), 0, 0));
+	// 	obj_list.push_back(new Triangle(Vec3(xr, yr, zr), Vec3(xr2, yr, zr), Vec3(xr2, yr2, zr), 0, 0));
+	// 	// front face
+	// 	obj_list.push_back(new Triangle(Vec3(xr, yr2, zr2), Vec3(xr2, yr2, zr2), Vec3(xr2, yr, zr2), 0, 0));
+	// 	obj_list.push_back(new Triangle(Vec3(xr2, yr, zr2), Vec3(xr, yr, zr2), Vec3(xr, yr2, zr2), 0, 0));
+	// 	// left face
+	// 	obj_list.push_back(new Triangle(Vec3(xr, yr2, zr), Vec3(xr, yr2, zr2), Vec3(xr, yr, zr2), 0, 0));
+	// 	obj_list.push_back(new Triangle(Vec3(xr, yr, zr2), Vec3(xr, yr, zr), Vec3(xr, yr2, zr), 0, 0));
+	// 	// right face
+	// 	obj_list.push_back(new Triangle(Vec3(xr2, yr2, zr2), Vec3(xr2, yr2, zr), Vec3(xr2, yr, zr), 0, 0));
+	// 	obj_list.push_back(new Triangle(Vec3(xr2, yr, zr), Vec3(xr2, yr, zr2), Vec3(xr2, yr2, zr2), 0, 0));
 	// }
 
-
 }
+
 void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 
 	// add main sphere
