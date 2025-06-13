@@ -135,7 +135,10 @@ void create_scene_light_grids(vector<LightGrid> &lgs) {
 		} 
 	}
 
+	// re-build the lg so that it's as balanced as possible
 	for (int i = 0; i <= lv_num; i ++) {
+		lgs[i].balance();
+		
 		cout << "for grid lv of: " << i << endl;
 		cout << "	num of node: " << lgs[i].get_size() << endl;
 		cout << "	num of repeation: " << lgs[i].get_repeation() << endl;

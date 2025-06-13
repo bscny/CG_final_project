@@ -6,7 +6,7 @@
 #define   WIDTH    1000
 #define   HEIGHT    500
 
-#define   ANTI_ALIASING    true
+#define   ANTI_ALIASING    false
 #define   SAMPLES_PER_PIXAL    25
 
 #define   BOUNCE   5

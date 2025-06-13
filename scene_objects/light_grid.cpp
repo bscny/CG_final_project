@@ -148,6 +148,69 @@ void LightGrid::insert_recursive(Node *node, Vec3 P, Vec3 I, Vec3 W, float weigh
     }
 }
 
+void LightGrid::balance() {
+    if (size == 0) return;
+
+    // Flatten the current tree into a vector
+    vector<Node> nodes;
+    flat(nodes);
+    
+    // Clear the current tree
+    delete root;
+    
+    // Create new empty root
+    root = new Node(world_max_pos, world_min_pos, 0);
+
+    // reset params
+    depth = 0;
+    
+    // Rebuild tree using median split
+    build_balanced_tree(root, nodes, 0, size - 1, 0);
+}
+
+void LightGrid::build_balanced_tree(Node* node, vector<Node>& nodes, int start, int end, int current_depth) {
+    if (start > end) return;
+    
+    // Sort by current dimension
+    int dim = current_depth % 3;
+    sort(nodes.begin() + start, nodes.begin() + end + 1,
+            [dim](const Node& a, const Node& b) {
+                return a.grid_pos[dim] < b.grid_pos[dim];
+            });
+    
+    // Find median
+    int mid = start + (end - start) / 2;
+    
+    // Set current node data
+    node->grid_pos = nodes[mid].grid_pos;
+    node->intensity = nodes[mid].intensity;
+    node->wieghted_pos = nodes[mid].wieghted_pos;
+    node->weight = nodes[mid].weight;
+    node->has_light = true;
+    
+    if (current_depth > depth) {
+        depth = current_depth;
+    }
+    
+    // Create and recursively build left subtree
+    if (start <= mid - 1) {
+        Vec3 left_max = node->max_pos;
+        Vec3 left_min = node->min_pos;
+        left_max[dim] = node->split_value;
+        node->left = new Node(left_max, left_min, (current_depth + 1) % 3);
+        build_balanced_tree(node->left, nodes, start, mid - 1, current_depth + 1);
+    }
+    
+    // Create and recursively build right subtree
+    if (mid + 1 <= end) {
+        Vec3 right_max = node->max_pos;
+        Vec3 right_min = node->min_pos;
+        right_min[dim] = node->split_value;
+        node->right = new Node(right_max, right_min, (current_depth + 1) % 3);
+        build_balanced_tree(node->right, nodes, mid + 1, end, current_depth + 1);
+    }
+}
+
 // Queries
 // TODO i dont think we need this api
 // Node LightGrid::nearest_neighbor(const Vec3 &target) const {
