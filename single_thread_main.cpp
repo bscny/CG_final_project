@@ -51,11 +51,10 @@ int main()
 	vector<Vec3> camera_position = {origin, lower_left_coner, horizontal, vertical};
 	// scene object params
 	vector<Object *> obj_list;
-	create_scene(obj_list, camera_position);
 
 	// light params
 	vector<Light> lights;
-	create_scene_lights(lights);
+	create_scene(obj_list, camera_position, lights);
 
 	fstream file;
 	// relative to /build

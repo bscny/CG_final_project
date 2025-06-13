@@ -28,7 +28,7 @@ vector<float> create_box(vector<Object *> &obj_list, vector<Vec3> &camera_positi
 	// Vec3 origin(0, 0, 1);
 	// Vec3 horizontal(4, 0, 0);
 	// Vec3 vertical(0, 2, 0);
-	Vec3 origin = camera_position[0];           
+	// Vec3 origin = camera_position[0];           
     Vec3 lower_left_corner = camera_position[1]; 
     Vec3 horizontal = camera_position[2];        
     Vec3 vertical = camera_position[3];          
@@ -43,11 +43,9 @@ vector<float> create_box(vector<Object *> &obj_list, vector<Vec3> &camera_positi
 	float front_bound = standard.z() + depth / 2;
 	float left_bound = standard.x() - width / 2;
 	float right_bound = standard.x() + width / 2;
-
-	vector<float> bounds = {floor_bound, ceiling_bound, back_bound, 
-							front_bound, left_bound, right_bound};
-	// add floor 
+	vector<float> bounds = {floor_bound, ceiling_bound, back_bound, front_bound, left_bound, right_bound};
 	
+	// add floor 
 	obj_list.push_back(new Triangle(Vec3(-max_size, floor_bound, max_size), Vec3(max_size, floor_bound, max_size), Vec3(-max_size, floor_bound, -max_size), 0, 0));
 	obj_list.push_back(new Triangle(Vec3(max_size, floor_bound, max_size), Vec3(max_size, floor_bound, -max_size), Vec3(-max_size, floor_bound, -max_size), 0, 0));
 	
@@ -103,11 +101,11 @@ void create_scene_objects(vector<Object *> &obj_list, vector<float> &bounds){
 }
 
 
-void create_scene_lights(vector<Light> &lights){
+void create_scene_lights(vector<Light> &lights, vector<float> &bounds) {
 	for (int i = 0; i < 50; i++) {
-		float xr = get_random(-1.5, 1.5);
-		float zr = get_random(-6, 1);
-		float yr = get_random(0, 2);
+		float xr = get_random(bounds[5] + 1, bounds[4] - 1);
+		float yr = get_random(bounds[0] + 1, bounds[1] - 1);
+		float zr = get_random(bounds[2] , bounds[3]);
 
 		float max_intensity = 0.25f;
 		float c = get_random(0, max_intensity);
@@ -133,7 +131,7 @@ void create_scene_lights(vector<Light> &lights){
 	}
 }
 
-void create_scene_light_grids(vector<LightGrid> &lgs) {
+void create_scene_light_grids(vector<LightGrid> &lgs, vector<float> &bounds) {
 	lgs.clear();
 
 	// create all levels of lg
@@ -144,9 +142,9 @@ void create_scene_light_grids(vector<LightGrid> &lgs) {
 
 	// creating VPL
 	for (int i = 0; i < 50; i++) {
-		float xr = get_random(-1.5, 1.5);
-		float zr = get_random(-6, 1);
-		float yr = get_random(0, 2);
+		float xr = get_random(bounds[5] + 1, bounds[4] - 1);
+		float yr = get_random(bounds[0] + 1, bounds[1] - 1);
+		float zr = get_random(bounds[2] , bounds[3]);
 		Vec3 I;
 
 		float max_intensity = 0.25f;
@@ -185,8 +183,16 @@ void create_scene_light_grids(vector<LightGrid> &lgs) {
 	}
 }
 
-
-void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position) {
+// for light grid
+void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<LightGrid> &lgs) {
 	vector<float> bounds = create_box(obj_list, camera_position);
 	create_scene_objects(obj_list, bounds);
+	create_scene_light_grids(lgs, bounds);
+}
+
+// for light
+void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<Light> &lights) {
+	vector<float> bounds = create_box(obj_list, camera_position);
+	create_scene_objects(obj_list, bounds);
+	create_scene_lights(lights, bounds);
 }
