@@ -14,5 +14,6 @@ using namespace std;
 
 void create_scene_objects(vector<Object *> &obj_list);
 void create_scene_lights(vector<Light> &lights);
+void create_scene(vector<Object *> &obj_list, vector<Light> &lights, vector<Vec3> &camera_position);
 
 #endif
