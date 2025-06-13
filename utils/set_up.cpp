@@ -15,7 +15,6 @@ float get_random(float lower, float upper) {
     return dist(gen);
 }
 
-
 vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
 	float distance_to_screen = 1.0f;
 	float width = 4.0f;
@@ -42,14 +41,40 @@ vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera
 						  standard.z() + depth / 2);
 
 	Vec3 bottom_left = Vec3(standard.x() - width / 2,
-						  standard.y() - height / 2, 
-						  standard.z() - depth / 2);
+						    standard.y() - height / 2, 
+						    standard.z() - depth / 2);
 
 	vector<Vec3> bounds = {top_right, bottom_left};
 
 	return bounds;
 }
 
+void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
+	float width = 8.0f;
+	float height = 5.0f;
+	float depth = 12.0f;
+	// Vec3 center = Vec3();
+	// add floor
+	obj_list.push_back(new Triangle(Vec3(-100, -0.55, 100), Vec3(100, -0.55, 100), Vec3(-100, -0.55, -100), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(100, -0.55, 100), Vec3(100, -0.55, -100), Vec3(-100, -0.55, -100), 0, 0));
+	// add ceiling
+	obj_list.push_back(new Triangle(Vec3(-100, 4, -100), Vec3(100, 4, -100), Vec3(-100, 4, 100), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(100, 4, -100), Vec3(100, 4, 100), Vec3(-100, 4, 100), 0, 0));
+
+	// add walls on the back
+	obj_list.push_back(new Triangle(Vec3(100, 100, -10), Vec3(-100, 100, -10), Vec3(-100, -100, -10), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(-100, -100, -10), Vec3(100, -100, -10), Vec3(100, 100, -10), 0, 0));
+	// add walls on the front
+	obj_list.push_back(new Triangle(Vec3(-100, 100, 2), Vec3(100, 100, 2), Vec3(100, -100, 2), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(100, -100, 2), Vec3(-100, -100, 2), Vec3(-100, 100, 2), 0, 0));
+	// add walls on the left
+	obj_list.push_back(new Triangle(Vec3(-4, 100, -100), Vec3(-4, 100, 100), Vec3(-4, -100, 100), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(-4, -100, 100), Vec3(-4, -100, -100), Vec3(-4, 100, -100), 0, 0));
+	// add walls on the right
+	obj_list.push_back(new Triangle(Vec3(4, 100, 100), Vec3(4, 100, -100), Vec3(4, -100, -100), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(4, -100, -100), Vec3(4, -100, 100), Vec3(4, 100, 100), 0, 0));
+
+}
 void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 
 	// add main sphere
@@ -65,7 +90,7 @@ void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 	Vec3 v4 = 1 * Vec3( 1, -1, -1) + move;
 
 	add_tetrahedron(obj_list, v1, v2, v3, v4, 0, 0);*/
-
+	add_box(obj_list, bounds);
 	
 	// add random objs
 	for (int i = 0; i < 40; i++) {
@@ -154,7 +179,7 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 
 		// get the influenced grid vertices for this light at each lv
 		for (int i = 0; i <= lv_num; i ++) {
-			insert_influenced_grid_vertices(lgs[i], Vec3(xr, yr, zr), I, Vec3(-1.5, 0, -6), H * pow(2, i));
+			insert_influenced_grid_vertices(lgs[i], Vec3(xr, yr, zr), I, bounds[1], H * pow(2, i));
 		} 
 	}
 
