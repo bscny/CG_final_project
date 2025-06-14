@@ -13,10 +13,13 @@
 
 using namespace std;
 
-void create_scene_objects(vector<Object *> &obj_list);
+void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds);
 
-void create_scene_lights(vector<Light> &lights);
+void create_scene_lights(vector<Light> &lights, vector<Vec3> &bounds);
 
-void create_scene_light_grids(vector<LightGrid> &lgs);
+void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds);
+
+void create_scene(vector<Object *> &obj_list,  vector<Vec3> &camera_position, vector<LightGrid> &lgs);
+void create_scene(vector<Object *> &obj_list,  vector<Vec3> &camera_position, vector<Light> &lights);
 
 #endif
