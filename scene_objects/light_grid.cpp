@@ -153,10 +153,7 @@ void LightGrid::balance() {
 
     // Flatten the current tree into a vector
     vector<Node> nodes;
-    flat(nodes);
-    
-    // Clear the current tree
-    delete root;
+    flat(nodes, true);
     
     // Create new empty root
     root = new Node(world_max_pos, world_min_pos, 0);
@@ -298,16 +295,18 @@ void LightGrid::radius_search_recursive(Node *node, std::vector<Node> &target_ar
 }
 
 // transform
-void LightGrid::flat(vector<Node> &target_array) const {
+void LightGrid::flat(vector<Node> &target_array, bool delete_flag) const {
     target_array.clear();
-    inorder(root, target_array);
+    inorder(root, target_array, delete_flag);
 }
 
-void LightGrid::inorder(Node *node, vector<Node> &target_array) const {
+void LightGrid::inorder(Node *node, vector<Node> &target_array, bool delete_flag) const {
     if (node && node->has_light) {
-        inorder(node->left, target_array);
+        inorder(node->left, target_array, delete_flag);
         target_array.push_back(*node);
-        inorder(node->right, target_array);
+        inorder(node->right, target_array, delete_flag);
+
+        if (delete_flag) delete node;
     }
 }
 
