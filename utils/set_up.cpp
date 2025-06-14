@@ -16,10 +16,10 @@ float get_random(float lower, float upper) {
 }
 
 vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
-	float distance_to_screen = -100.0f;
-	float width = 100.0f;
-	float height = 100.0f;
-	float depth = 100.0f;
+	float distance_to_screen = -1.0f;
+	float width = 8.0f;
+	float height = 4.5f;
+	float depth = 12.0f;
 	// camera parameters
 	// Vec3 lower_left_corner(-2, -1, -1);
 	// Vec3 origin(0, 0, 1);
@@ -49,7 +49,7 @@ vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera
 }
 
 void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
-	float maxlength = 150.0f;
+	float maxlength = 100.0f;
 	// Vec3 center = Vec3(bounds[0].x() + bounds[1].x(), 
 	// 				   bounds[0].y() + bounds[1].y(), 
 	// 				   bounds[0].z());
@@ -113,6 +113,50 @@ void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
 
 }
 
+void add_small_ball_with_light(vector<Object *> &obj_list, vector<Light> &lights, vector<Vec3> &bounds){
+    // add random spheres and multiple lights inside the box
+    for (int i = 0; i < 40; i++) {
+        float xr = get_random(bounds[1].x(), bounds[0].x());
+        float yr = get_random(bounds[1].y(), bounds[0].y());
+        float zr = get_random(bounds[1].z(), bounds[0].z());  
+        float r1 = get_random(-1, 1);
+        
+        float sphere_radius = 1.0f;  
+        
+        obj_list.push_back(new Sphere(Vec3(xr, yr, zr), sphere_radius, r1, 0));
+        
+        int num_lights = (int)get_random(15, 50);
+        for (int j = 0; j < num_lights; j++) {
+            float theta = get_random(0, 2 * M_PI);  
+            float phi = get_random(0, M_PI);        
+            float r = get_random(0, sphere_radius * 0.9);  
+            
+            float light_x = xr + r * sin(phi) * cos(theta);
+            float light_y = yr + r * sin(phi) * sin(theta);
+            float light_z = zr + r * cos(phi);
+            
+            float max_intensity = 15.0f;
+            float intensity = get_random(0.1f, max_intensity);
+            
+            float color_choice = get_random(0, 1);
+            Vec3 light_color;
+            if (color_choice < 0.2f) {
+                light_color = Vec3(intensity, 0, 0);  // 紅
+            } else if (color_choice < 0.4f) {
+                light_color = Vec3(0, intensity, 0);  // 綠
+            } else if (color_choice < 0.6f) {
+                light_color = Vec3(0, 0, intensity);  // 藍
+            } else if (color_choice < 0.8f) {
+                light_color = Vec3(intensity, intensity, 0);  // 黃
+            } else {
+                light_color = Vec3(intensity, intensity, intensity);  // 白
+            }
+            
+            lights.push_back(Light(Vec3(light_x, light_y, light_z), light_color));
+        }
+    }
+}
+
 void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 
 	// add main sphere
@@ -120,10 +164,10 @@ void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
     float center_y = (bounds[0].y() + bounds[1].y()) / 2;
     float center_z = (bounds[0].z() + bounds[1].z()) / 2;
     
-    // add main spheres - 分散在箱子中央區域
-	obj_list.push_back(new Sphere(Vec3(center_x - 22, center_y, center_z + 20), 10, 0.8, 0, DIAMOND_N));
-    obj_list.push_back(new Sphere(Vec3(center_x, center_y, center_z + 20), 10, 0, 0, GLASS_N));
-    obj_list.push_back(new Sphere(Vec3(center_x + 22, center_y, center_z + 20), 10, 0.6, 0, WATER_N));
+    // add main spheres 
+	obj_list.push_back(new Sphere(Vec3(center_x - 1.2, center_y, center_z), 0.5, 0.8, 0, DIAMOND_N));
+    obj_list.push_back(new Sphere(Vec3(center_x, center_y, center_z), 0.5, 0, 0, GLASS_N));
+    obj_list.push_back(new Sphere(Vec3(center_x + 1.2, center_y, center_z), 0.5, 0.6, 0, WATER_N));
     
    
 	// add tetrahedron
@@ -135,7 +179,6 @@ void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 
 	add_tetrahedron(obj_list, v1, v2, v3, v4, 0, 0);*/
 	add_box(obj_list, bounds);
-	
 	// add random objs
 	for (int i = 0; i < 40; i++) {
 		float xr = get_random(bounds[1].x(), bounds[0].x());
@@ -146,7 +189,7 @@ void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 		// if (r2 < 0){
 		// 	r2 = 0;
 		// }
-		obj_list.push_back(new Sphere(Vec3(xr, yr, zr-2), 1, r1, 0));
+		obj_list.push_back(new Sphere(Vec3(xr, yr, zr-2), 0.05, r1, 0));
 	}
 }
 
@@ -157,7 +200,7 @@ void create_scene_lights(vector<Light> &lights, vector<Vec3> &bounds) {
 		float yr = get_random(bounds[1].y(), bounds[0].y());
 		float zr = get_random(bounds[1].z(), bounds[0].z());
 
-		float max_intensity = 25.0f;
+		float max_intensity = 0.5f;
 		float c = get_random(0, max_intensity);
 		float x_range = bounds[0].x() - bounds[1].x();  
 		float x_ratio = (xr - bounds[1].x()) / x_range;  
@@ -253,5 +296,6 @@ void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vec
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<Light> &lights) {
 	vector<Vec3> bounds = create_bounded_box(obj_list, camera_position);
 	create_scene_objects(obj_list, bounds);
+	// add_small_ball_with_light(obj_list, lights, bounds);
 	create_scene_lights(lights, bounds);
 }
