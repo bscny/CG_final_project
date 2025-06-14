@@ -16,11 +16,10 @@ float get_random(float lower, float upper) {
 }
 
 vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
-	float distance_to_screen = 1.0f;
-	float width = 4.0f;
-	float height = 2.0f;
-	float depth = 6.0f;
-
+	float distance_to_screen = -100.0f;
+	float width = 100.0f;
+	float height = 100.0f;
+	float depth = 100.0f;
 	// camera parameters
 	// Vec3 lower_left_corner(-2, -1, -1);
 	// Vec3 origin(0, 0, 1);
@@ -50,10 +49,10 @@ vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera
 }
 
 void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
-	float width = 8.0f;
-	float height = 5.0f;
-	float depth = 8.0f;
-	float maxlength = 100.0f;
+	float width = 100.0f;
+	float height = 35.0f;
+	float depth = 35.0f;
+	float maxlength = 150.0f;
 	// Vec3 center = Vec3(bounds[0].x() + bounds[1].x(), 
 	// 				   bounds[0].y() + bounds[1].y(), 
 	// 				   bounds[0].z());
@@ -70,8 +69,8 @@ void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
 	obj_list.push_back(new Triangle(Vec3(maxlength, maxlength, bounds[1].z()), Vec3(-maxlength, maxlength, bounds[1].z()), Vec3(-maxlength, -maxlength, bounds[1].z()), 0, 0));
 	obj_list.push_back(new Triangle(Vec3(-maxlength, -maxlength, bounds[1].z()), Vec3(maxlength, -maxlength, bounds[1].z()), Vec3(maxlength, maxlength, bounds[1].z()), 0, 0));
 	// add walls on the front
-	obj_list.push_back(new Triangle(Vec3(-maxlength, maxlength, bounds[0].z()), Vec3(maxlength, maxlength, bounds[0].z()), Vec3(maxlength, -maxlength, bounds[0].z()), 0, 0));
-	obj_list.push_back(new Triangle(Vec3(maxlength, -maxlength, bounds[0].z()), Vec3(-maxlength, -maxlength, bounds[0].z()), Vec3(-maxlength, maxlength, bounds[0].z()), 0, 0));
+	// obj_list.push_back(new Triangle(Vec3(-maxlength, maxlength, bounds[0].z()), Vec3(maxlength, maxlength, bounds[0].z()), Vec3(maxlength, -maxlength, bounds[0].z()), 0, 0));
+	// obj_list.push_back(new Triangle(Vec3(maxlength, -maxlength, bounds[0].z()), Vec3(-maxlength, -maxlength, bounds[0].z()), Vec3(-maxlength, maxlength, bounds[0].z()), 0, 0));
 	
 	// add walls on the left
 	obj_list.push_back(new Triangle(Vec3(bounds[1].x(), maxlength, -maxlength), Vec3(bounds[1].x(), maxlength, maxlength), Vec3(bounds[1].x(), -maxlength, maxlength), 0, 0));
@@ -125,9 +124,9 @@ void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
     float center_z = (bounds[0].z() + bounds[1].z()) / 2;
     
     // add main spheres - 分散在箱子中央區域
-	obj_list.push_back(new Sphere(Vec3(center_x - 0.8, center_y - 0.2, center_z - 0.4), 0.3, 0.8, 0, DIAMOND_N));
-    obj_list.push_back(new Sphere(Vec3(center_x, center_y - 0.2, center_z - 0.4), 0.3, 0, 0, GLASS_N));
-    obj_list.push_back(new Sphere(Vec3(center_x + 0.8, center_y - 0.2, center_z - 0.4), 0.3, 0.6, 0, WATER_N));
+	obj_list.push_back(new Sphere(Vec3(center_x - 22, center_y, center_z + 20), 10, 0.8, 0, DIAMOND_N));
+    obj_list.push_back(new Sphere(Vec3(center_x, center_y, center_z + 20), 10, 0, 0, GLASS_N));
+    obj_list.push_back(new Sphere(Vec3(center_x + 22, center_y, center_z + 20), 10, 0.6, 0, WATER_N));
     
    
 	// add tetrahedron
@@ -150,7 +149,7 @@ void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 		// if (r2 < 0){
 		// 	r2 = 0;
 		// }
-		obj_list.push_back(new Sphere(Vec3(xr, yr, zr-2), 0.05, r1, 0));
+		obj_list.push_back(new Sphere(Vec3(xr, yr, zr-2), 1, r1, 0));
 	}
 }
 
@@ -161,7 +160,7 @@ void create_scene_lights(vector<Light> &lights, vector<Vec3> &bounds) {
 		float yr = get_random(bounds[1].y(), bounds[0].y());
 		float zr = get_random(bounds[1].z(), bounds[0].z());
 
-		float max_intensity = 0.8f;
+		float max_intensity = 25.0f;
 		float c = get_random(0, max_intensity);
 		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
