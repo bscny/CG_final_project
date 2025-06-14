@@ -15,7 +15,7 @@ float get_random(float lower, float upper) {
     return dist(gen);
 }
 
-vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
+vector<Vec3> create_bounded_box(vector<Vec3> &camera_position){
 	float distance_to_screen = -1.0f;
 	float width = 8.0f;
 	float height = 4.5f;
