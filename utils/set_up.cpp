@@ -49,9 +49,6 @@ vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera
 }
 
 void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
-	float width = 100.0f;
-	float height = 100.0f;
-	float depth = 100.0f;
 	float maxlength = 150.0f;
 	// Vec3 center = Vec3(bounds[0].x() + bounds[1].x(), 
 	// 				   bounds[0].y() + bounds[1].y(), 
