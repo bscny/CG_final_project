@@ -15,17 +15,12 @@ float get_random(float lower, float upper) {
     return dist(gen);
 }
 
-vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera_position){
+vector<Vec3> create_bounded_box(vector<Vec3> &camera_position){
 	float distance_to_screen = -100.0f;
 	float width = 100.0f;
 	float height = 100.0f;
 	float depth = 100.0f;
-	// camera parameters
-	// Vec3 lower_left_corner(-2, -1, -1);
-	// Vec3 origin(0, 0, 1);
-	// Vec3 horizontal(4, 0, 0);
-	// Vec3 vertical(0, 2, 0);
-	// Vec3 origin = camera_position[0];           
+        
     Vec3 lower_left_corner = camera_position[1]; 
     Vec3 horizontal = camera_position[2];        
     Vec3 vertical = camera_position[3];          
@@ -234,7 +229,10 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 		} 
 	}
 
+	// re-build the lg so that it's as balanced as possible
 	for (int i = 0; i <= lv_num; i ++) {
+		lgs[i].balance();
+		
 		cout << "for grid lv of: " << i << endl;
 		cout << "	num of node: " << lgs[i].get_size() << endl;
 		cout << "	num of repeation: " << lgs[i].get_repeation() << endl;
@@ -244,14 +242,14 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 
 // for light grid
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<LightGrid> &lgs) {
-	vector<Vec3> bounds = create_bounded_box(obj_list, camera_position);
+	vector<Vec3> bounds = create_bounded_box(camera_position);
 	create_scene_objects(obj_list, bounds);
 	create_scene_light_grids(lgs, bounds);
 }
 
 // for light
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<Light> &lights) {
-	vector<Vec3> bounds = create_bounded_box(obj_list, camera_position);
+	vector<Vec3> bounds = create_bounded_box(camera_position);
 	create_scene_objects(obj_list, bounds);
 	create_scene_lights(lights, bounds);
 }
