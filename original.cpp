@@ -98,11 +98,11 @@ int main() {
     vector<Vec3> camera_position = {origin, lower_left_corner, horizontal, vertical};
     // Scene object params
     vector<Object*> obj_list;
-    create_scene(obj_list, camera_position);
+
     
     // Light params
     vector<Light> lights;
-    create_scene_lights(lights);
+    create_scene(obj_list, camera_position, lights);
     
     // Image buffer to store results
     vector<vector<Vec3>> image_buffer(HEIGHT, vector<Vec3>(WIDTH));

@@ -100,11 +100,10 @@ int main() {
     vector<Vec3> camera_position = {origin, lower_left_corner, horizontal, vertical};
     // Scene object params
     vector<Object*> obj_list;
-    create_scene(obj_list, camera_position);
     
     // Light params
     vector<LightGrid> lgs;
-    create_scene_light_grids(lgs);
+    create_scene(obj_list, camera_position, lgs);
     
     // Image buffer to store results
     vector<vector<Vec3>> image_buffer(HEIGHT, vector<Vec3>(WIDTH));
