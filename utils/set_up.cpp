@@ -115,13 +115,16 @@ void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
 void add_small_ball_with_light(vector<Object *> &obj_list, vector<Light> &lights, vector<Vec3> &bounds){
     float sphere_radius = 0.05f;
 	int num_sphere = 10;
+	float sphere_pos_offset = 0.1f;  
 	int num_lights = 50;
+	float light_pos_offset = 0.02f;  
 	float light_intensity = 0.005f;
+
     for (int i = 0; i < num_sphere; i++) {
         // Random position within bounds
-        float xr = get_random(bounds[0].x() -0.1f, bounds[1].x() + 0.1f);
-        float yr = get_random(bounds[0].y() -0.1f, bounds[1].y() + 0.1f);
-        float zr = get_random(bounds[0].z() -0.1f, bounds[1].z() + 0.1f);
+        float xr = get_random(bounds[0].x() - sphere_pos_offset, bounds[1].x() + sphere_pos_offset);
+        float yr = get_random(bounds[0].y() - sphere_pos_offset, bounds[1].y() + sphere_pos_offset);
+        float zr = get_random(bounds[0].z() - sphere_pos_offset, bounds[1].z() + sphere_pos_offset);
         
         // Create the sphere object (air ball with refractive index)
         obj_list.push_back(new Sphere(Vec3(xr, yr, zr), sphere_radius, 0, 0, AIR_N));
@@ -162,7 +165,7 @@ void add_small_ball_with_light(vector<Object *> &obj_list, vector<Light> &lights
             float phi = acos(get_random(-1, 1));    // Polar angle (uniform on sphere surface)
             
             // Place lights exactly on the sphere surface
-            float light_offset = sphere_radius + 0.01f;  // Small gap to prevent noise
+            float light_offset = sphere_radius + light_pos_offset;  // Small gap to prevent noise
             float light_x = xr + light_offset * sin(phi) * cos(theta);
             float light_y = yr + light_offset * sin(phi) * sin(theta);
             float light_z = zr + light_offset * cos(phi);
@@ -180,11 +183,13 @@ void add_small_ball_with_light(vector<Object *> &obj_list, vector<Light> &lights
 // Each sphere acts as a light source with many surface lights of the same color
 void add_small_ball_with_lightgrids(vector<Object *> &obj_list, vector<LightGrid> &lgs, vector<Vec3> &bounds){
     float sphere_radius = 0.05f;
+	float sphere_pos_offset = 0.1f;  // Offset to avoid numerical issues
 	int num_sphere = 10;
 	int num_lights = 50;
+	float light_pos_offset = 0.02f;  // Small offset to prevent numerical issues
 	// int num_lights = (int)get_random(20, 50);
-	float light_intensity = 15.0f;
-	// float light_intensity = get_random(0.05f, 0.5f) * max_intensity;
+	// float light_intensity = 0.3f;
+	float light_intensity = get_random(0.05f, 0.5f);
 
 	int lv_num = 3;
 	for (int i = 0; i <= lv_num; i ++) {
@@ -195,9 +200,9 @@ void add_small_ball_with_lightgrids(vector<Object *> &obj_list, vector<LightGrid
 
     for (int i = 0; i < num_sphere; i++) {
         // Random position within bounds
-        float xr = get_random(bounds[0].x()-0.1f, bounds[1].x() + 0.1f);
-        float yr = get_random(bounds[0].y()-0.1f, bounds[1].y() + 0.1f);
-        float zr = get_random(bounds[0].z()-0.1f, bounds[1].z() + 0.1f);
+        float xr = get_random(bounds[0].x() - sphere_pos_offset, bounds[1].x() + sphere_pos_offset);
+        float yr = get_random(bounds[0].y() - sphere_pos_offset, bounds[1].y() + sphere_pos_offset);
+        float zr = get_random(bounds[0].z() - sphere_pos_offset, bounds[1].z() + sphere_pos_offset);
         
      
         // Create the sphere object (air ball with refractive index)
@@ -235,7 +240,7 @@ void add_small_ball_with_lightgrids(vector<Object *> &obj_list, vector<LightGrid
             float phi = acos(get_random(-1, 1));    // Polar angle (uniform on sphere surface)
             
             // Place lights slightly outside the sphere surface to avoid numerical issues
-            float light_offset = sphere_radius + 0.02f;  // Small gap to prevent noise
+            float light_offset = sphere_radius + light_pos_offset;  // Small gap to prevent noise
             float light_x = xr + light_offset * sin(phi) * cos(theta);
             float light_y = yr + light_offset * sin(phi) * sin(theta);
             float light_z = zr + light_offset * cos(phi);
@@ -338,7 +343,7 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 		float zr = get_random(bounds[1].z(), bounds[0].z());
 		Vec3 I;
 
-		float max_intensity = 25.0f;
+		float max_intensity = 5.0f;
 		float c = get_random(0, max_intensity);
 
 		float x_range = bounds[0].x() - bounds[1].x();
