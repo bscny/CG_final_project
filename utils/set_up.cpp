@@ -120,10 +120,16 @@ void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
 void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 
 	// add main sphere
-	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0, GLASS_N));
-	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.6, 0, WATER_N));
-	obj_list.push_back(new Sphere(Vec3(-1, 0, -2.25), 0.5, 0.8, 0, DIAMOND_N));
-
+    float center_x = (bounds[0].x() + bounds[1].x()) / 2;
+    float center_y = (bounds[0].y() + bounds[1].y()) / 2;
+    float center_z = (bounds[0].z() + bounds[1].z()) / 2;
+    
+    // add main spheres - 分散在箱子中央區域
+	obj_list.push_back(new Sphere(Vec3(center_x - 0.8, center_y - 0.2, center_z - 0.4), 0.3, 0.8, 0, DIAMOND_N));
+    obj_list.push_back(new Sphere(Vec3(center_x, center_y - 0.2, center_z - 0.4), 0.3, 0, 0, GLASS_N));
+    obj_list.push_back(new Sphere(Vec3(center_x + 0.8, center_y - 0.2, center_z - 0.4), 0.3, 0.6, 0, WATER_N));
+    
+   
 	// add tetrahedron
 	/*Vec3 move(0, 0, -3);
 	Vec3 v1 = 1 * Vec3( 1,  1,  1) + move;
@@ -150,12 +156,12 @@ void create_scene_objects(vector<Object *> &obj_list, vector<Vec3> &bounds){
 
 
 void create_scene_lights(vector<Light> &lights, vector<Vec3> &bounds) {
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 10; i++) {
 		float xr = get_random(bounds[1].x(), bounds[0].x());
 		float yr = get_random(bounds[1].y(), bounds[0].y());
 		float zr = get_random(bounds[1].z(), bounds[0].z());
 
-		float max_intensity = 0.25f;
+		float max_intensity = 0.8f;
 		float c = get_random(0, max_intensity);
 		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
@@ -237,7 +243,7 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<LightGrid> &lgs) {
 	vector<Vec3> bounds = create_bounded_box(obj_list, camera_position);
 	create_scene_objects(obj_list, bounds);
-	create_scene_light_grids(lgs, bounds);
+	// create_scene_light_grids(lgs, bounds);
 }
 
 // for light
