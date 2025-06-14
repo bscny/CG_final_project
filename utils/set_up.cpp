@@ -49,9 +49,6 @@ vector<Vec3> create_bounded_box(vector<Object *> &obj_list, vector<Vec3> &camera
 }
 
 void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
-	float width = 100.0f;
-	float height = 35.0f;
-	float depth = 35.0f;
 	float maxlength = 150.0f;
 	// Vec3 center = Vec3(bounds[0].x() + bounds[1].x(), 
 	// 				   bounds[0].y() + bounds[1].y(), 
@@ -69,8 +66,8 @@ void add_box(vector<Object *> &obj_list, vector<Vec3> &bounds) {
 	obj_list.push_back(new Triangle(Vec3(maxlength, maxlength, bounds[1].z()), Vec3(-maxlength, maxlength, bounds[1].z()), Vec3(-maxlength, -maxlength, bounds[1].z()), 0, 0));
 	obj_list.push_back(new Triangle(Vec3(-maxlength, -maxlength, bounds[1].z()), Vec3(maxlength, -maxlength, bounds[1].z()), Vec3(maxlength, maxlength, bounds[1].z()), 0, 0));
 	// add walls on the front
-	// obj_list.push_back(new Triangle(Vec3(-maxlength, maxlength, bounds[0].z()), Vec3(maxlength, maxlength, bounds[0].z()), Vec3(maxlength, -maxlength, bounds[0].z()), 0, 0));
-	// obj_list.push_back(new Triangle(Vec3(maxlength, -maxlength, bounds[0].z()), Vec3(-maxlength, -maxlength, bounds[0].z()), Vec3(-maxlength, maxlength, bounds[0].z()), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(-maxlength, maxlength, bounds[0].z() +100), Vec3(maxlength, maxlength, bounds[0].z()+100), Vec3(maxlength, -maxlength, bounds[0].z()+100), 0, 0));
+	obj_list.push_back(new Triangle(Vec3(maxlength, -maxlength, bounds[0].z() +100), Vec3(-maxlength, -maxlength, bounds[0].z()+100), Vec3(-maxlength, maxlength, bounds[0].z()+100), 0, 0));
 	
 	// add walls on the left
 	obj_list.push_back(new Triangle(Vec3(bounds[1].x(), maxlength, -maxlength), Vec3(bounds[1].x(), maxlength, maxlength), Vec3(bounds[1].x(), -maxlength, maxlength), 0, 0));
@@ -162,19 +159,22 @@ void create_scene_lights(vector<Light> &lights, vector<Vec3> &bounds) {
 
 		float max_intensity = 25.0f;
 		float c = get_random(0, max_intensity);
-		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
+		float x_range = bounds[0].x() - bounds[1].x();  
+		float x_ratio = (xr - bounds[1].x()) / x_range;  
+
+		if(x_ratio < 1.0f / 6.0f){
 			// pure red
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
-		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
+		}else if(x_ratio < 2.0f / 6.0f){
 			// red + green
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
-		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
+		}else if(x_ratio < 3.0f / 6.0f){
 			// pure green
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
-		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
+		}else if(x_ratio < 4.0f / 6.0f){
 			// green + blue
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
-		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
+		}else if(x_ratio < 5.0f / 6.0f){
 			// pure blue
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
 		}else{
@@ -202,21 +202,25 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 		float zr = get_random(bounds[1].z(), bounds[0].z());
 		Vec3 I;
 
-		float max_intensity = 0.15f;
+		float max_intensity = 25.0f;
 		float c = get_random(0, max_intensity);
-		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
+
+		float x_range = bounds[0].x() - bounds[1].x();
+		float x_ratio = (xr - bounds[1].x()) / x_range;
+
+		if(x_ratio < 1.0f / 6.0f){
 			// pure red
 			I = Vec3(c, 0, 0);
-		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
+		}else if(x_ratio < 2.0f / 6.0f){
 			// red + green
 			I = Vec3(c, c, 0);
-		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
+		}else if(x_ratio < 3.0f / 6.0f){
 			// pure green
 			I = Vec3(0, c, 0);
-		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
+		}else if(x_ratio < 4.0f / 6.0f){
 			// green + blue
 			I = Vec3(0, c, c);
-		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
+		}else if(x_ratio < 5.0f / 6.0f){
 			// pure blue
 			I = Vec3(0, 0, c);
 		}else{
@@ -242,7 +246,7 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<LightGrid> &lgs) {
 	vector<Vec3> bounds = create_bounded_box(obj_list, camera_position);
 	create_scene_objects(obj_list, bounds);
-	// create_scene_light_grids(lgs, bounds);
+	create_scene_light_grids(lgs, bounds);
 }
 
 // for light
