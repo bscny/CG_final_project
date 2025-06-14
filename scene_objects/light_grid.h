@@ -2,9 +2,11 @@
 #define LIGHT_GRID_H
 
 #include <vector>
+#include <algorithm>
 #include <cmath>
 
 #include "tools/vec3.h"
+#include "scene_objects/light.h"
 
 struct Node {
     // needed for the light grid
@@ -41,6 +43,7 @@ class LightGrid {
         LightGrid(Vec3 world_max_p, Vec3 world_min_p);
 
         void insert(Vec3 P, Vec3 I, Vec3 W, float weight);
+        void balance();
 
         // queries
         // Node nearest_neighbor(const Vec3 &target) const;  // TODO i dont think we need this api
@@ -48,13 +51,13 @@ class LightGrid {
         void radius_search(std::vector<Node> &target_array, Vec3 center, float radius) const;
 
         // transform to a vector
-        void flat(std::vector<Node> &target_array) const;
+        void flat(std::vector<Node> &target_array, bool delete_flag) const;
 
         // getters
         int get_size() const;
         int get_repeation() const;
         int get_depth() const;
-    private:    
+    private:
         Node *root;
         int size;
         int repeation;
@@ -64,9 +67,10 @@ class LightGrid {
 
         // recursive helper function
         void insert_recursive(Node *node, Vec3 P, Vec3 I, Vec3 W, float weight, int current_depth);
+        void build_balanced_tree(Node* node, std::vector<Node>& nodes, int start, int end, int current_depth);
         void range_search_recursive(Node *node, std::vector<Node> &target_array, Vec3 max_bound, Vec3 min_bound) const;
         void radius_search_recursive(Node *node, std::vector<Node> &target_array, Vec3 center, float radius) const;
-        void inorder(Node *node, std::vector<Node> &target_array) const;
+        void inorder(Node *node, std::vector<Node> &target_array, bool delete_flag) const;
 };
 
 #endif

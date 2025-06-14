@@ -218,7 +218,7 @@ Vec3 trace_color_ray_lg(const Ray &r, int bounce, const vector<Object *> &obj_li
 		// for every light grid lv, do estimate lighting
 		if (lv == (int)lgs.size() - 1) {
 			// when it's the last level, we just get all the lights as possible lights
-			lgs[lv].flat(candidate_lights);
+			lgs[lv].flat(candidate_lights, false);
 		} else {
 			lgs[lv].radius_search(candidate_lights, P, ALPHA * H * pow(2, lv + 1));
 		}
