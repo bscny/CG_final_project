@@ -35,118 +35,55 @@ void add_box(vector<Object *> &obj_list) {
 	// add walls on the right
 	obj_list.push_back(new Triangle(Vec3(4, 100, 100), Vec3(4, 100, -100), Vec3(4, -100, -100), 0, 0));
 	obj_list.push_back(new Triangle(Vec3(4, -100, -100), Vec3(4, -100, 100), Vec3(4, 100, 100), 0, 0));
-
-
-	float min_x = -0.5f;
-	float max_x = 0.5f;
-   	float min_y = -0.5f;
-    float max_y = 0.5f;
-    float min_z = -2.5f;
-    float max_z = -1.5f;
-    
-    // add small room floor
-    obj_list.push_back(new Triangle(Vec3(min_x, min_y, min_z), Vec3(max_x, min_y, min_z), Vec3(min_x, min_y, max_z), 0, 0));
-    obj_list.push_back(new Triangle(Vec3(max_x, min_y, min_z), Vec3(max_x, min_y, max_z), Vec3(min_x, min_y, max_z), 0, 0));
-    // add small room ceiling
-    obj_list.push_back(new Triangle(Vec3(min_x, max_y, max_z), Vec3(max_x, max_y, max_z), Vec3(min_x, max_y, min_z), 0, 0));
-    obj_list.push_back(new Triangle(Vec3(max_x, max_y, max_z), Vec3(max_x, max_y, min_z), Vec3(min_x, max_y, min_z), 0, 0));
-    // add small room walls on the back
-    obj_list.push_back(new Triangle(Vec3(max_x, max_y, max_z), Vec3(min_x, max_y, max_z), Vec3(min_x, min_y, max_z), 0, 0));
-    obj_list.push_back(new Triangle(Vec3(min_x, min_y, max_z), Vec3(max_x, min_y, max_z), Vec3(max_x, max_y, max_z), 0, 0));
-    // add small room walls on the front
-    obj_list.push_back(new Triangle(Vec3(min_x, max_y, min_z), Vec3(max_x, max_y, min_z), Vec3(max_x, min_y, min_z), 0, 0));
-    obj_list.push_back(new Triangle(Vec3(max_x, min_y, min_z), Vec3(min_x, min_y, min_z), Vec3(min_x, max_y, min_z), 0, 0));
-    // add small room walls on the left
-    obj_list.push_back(new Triangle(Vec3(min_x, max_y, max_z), Vec3(min_x, max_y, min_z), Vec3(min_x, min_y, min_z), 0, 0));
-    obj_list.push_back(new Triangle(Vec3(min_x, min_y, min_z), Vec3(min_x, min_y, max_z), Vec3(min_x, max_y, max_z), 0, 0));
-    // add small room walls on the right
-    obj_list.push_back(new Triangle(Vec3(max_x, max_y, min_z), Vec3(max_x, max_y, max_z), Vec3(max_x, min_y, max_z), 0, 0));
-    obj_list.push_back(new Triangle(Vec3(max_x, min_y, max_z), Vec3(max_x, min_y, min_z), Vec3(max_x, max_y, min_z), 0, 0));
-
-	// add random small boxes
-    // for (int i = 0; i < 15; i++) {
- 
-    //     float scale = get_random(0.2f, 0.5f); 
-        
-    //     float center_x = get_random(-3.0f, 3.0f);
-    //     float center_y = get_random(0.0f, 2.5f);
-    //     float center_z = get_random(-9.0f, 1.0f);
-        
-    //     float half_width = 0.7f * scale;
-    //     float half_height = 0.75f * scale;
-    //     float half_depth = 1.0f * scale;
-        
-    //     float floor_y = center_y - half_height;
-    //     float ceiling_y = center_y + half_height;
-    //     float left_x = center_x - half_width;
-    //     float right_x = center_x + half_width;
-    //     float back_z = center_z + half_depth;
-    //     float front_z = center_z - half_depth;
-        
-    //     // add small box floor
-    //     obj_list.push_back(new Triangle(Vec3(left_x, floor_y, front_z), Vec3(right_x, floor_y, front_z), Vec3(left_x, floor_y, back_z), 0, 0));
-    //     obj_list.push_back(new Triangle(Vec3(right_x, floor_y, front_z), Vec3(right_x, floor_y, back_z), Vec3(left_x, floor_y, back_z), 0, 0));
-    //     // add small box ceiling
-    //     obj_list.push_back(new Triangle(Vec3(left_x, ceiling_y, back_z), Vec3(right_x, ceiling_y, back_z), Vec3(left_x, ceiling_y, front_z), 0, 0));
-    //     obj_list.push_back(new Triangle(Vec3(right_x, ceiling_y, back_z), Vec3(right_x, ceiling_y, front_z), Vec3(left_x, ceiling_y, front_z), 0, 0));
-        
-    //     // add small box walls on the back
-    //     obj_list.push_back(new Triangle(Vec3(right_x, ceiling_y, back_z), Vec3(left_x, ceiling_y, back_z), Vec3(left_x, floor_y, back_z), 0, 0));
-    //     obj_list.push_back(new Triangle(Vec3(left_x, floor_y, back_z), Vec3(right_x, floor_y, back_z), Vec3(right_x, ceiling_y, back_z), 0, 0));
-    //     // add small box walls on the front
-    //     obj_list.push_back(new Triangle(Vec3(left_x, ceiling_y, front_z), Vec3(right_x, ceiling_y, front_z), Vec3(right_x, floor_y, front_z), 0, 0));
-    //     obj_list.push_back(new Triangle(Vec3(right_x, floor_y, front_z), Vec3(left_x, floor_y, front_z), Vec3(left_x, ceiling_y, front_z), 0, 0));
-    //     // add small box walls on the left
-    //     obj_list.push_back(new Triangle(Vec3(left_x, ceiling_y, back_z), Vec3(left_x, ceiling_y, front_z), Vec3(left_x, floor_y, front_z), 0, 0));
-    //     obj_list.push_back(new Triangle(Vec3(left_x, floor_y, front_z), Vec3(left_x, floor_y, back_z), Vec3(left_x, ceiling_y, back_z), 0, 0));
-    //     // add small box walls on the right
-    //     obj_list.push_back(new Triangle(Vec3(right_x, ceiling_y, front_z), Vec3(right_x, ceiling_y, back_z), Vec3(right_x, floor_y, back_z), 0, 0));
-    //     obj_list.push_back(new Triangle(Vec3(right_x, floor_y, back_z), Vec3(right_x, floor_y, front_z), Vec3(right_x, ceiling_y, front_z), 0, 0));
-    // }
 	
 }
 
 void create_scene_objects(vector<Object *> &obj_list) {
 	// add main sphere
-	obj_list.push_back(new Sphere(Vec3(0, 0, -2), 0.5, 0, 0, GLASS_N));
-	obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.6, 0, WATER_N));
-	obj_list.push_back(new Sphere(Vec3(-1.5, 0, -3), 0.5, 0.8, 0, DIAMOND_N));
+	obj_list.push_back(new Sphere(Vec3(1.5, 0, -2.5), 0.5, 0, 0, DIAMOND_N));
+	// obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.6, 0, WATER_N));
+	// obj_list.push_back(new Sphere(Vec3(-1.5, 0, -2.5), 0.5, 0.8, 0, DIAMOND_N));
 
-	// add tetrahedron
-	// Vec3 move(2, 0.5, -4.1);
-	// Vec3 v1 = 0.5 * Vec3( 1,  1,  1) + move;
-	// Vec3 v2 = 0.5 * Vec3(-1, -1,  1) + move;
-	// Vec3 v3 = 0.5 * Vec3(-1,  1, -1) + move;
-	// Vec3 v4 = 1 * Vec3( 1, -1, -1) + move;
+	// add main box
+	float min_x = -2.0f;
+	float max_x = -1.0f;
+   	float min_y = -0.5f;
+    float max_y = 0.5f;
+    float min_z = -3.5f;
+    float max_z = -2.5f;
+    float box_r_t = 0.5f;
+	float box_w_t = 0.6f; 
+    // add small room floor
+    obj_list.push_back(new Triangle(Vec3(min_x, min_y, min_z), Vec3(max_x, min_y, min_z), Vec3(min_x, min_y, max_z), box_r_t, box_w_t));
+    obj_list.push_back(new Triangle(Vec3(max_x, min_y, min_z), Vec3(max_x, min_y, max_z), Vec3(min_x, min_y, max_z), box_r_t, box_w_t));
+    // add small room ceiling
+    obj_list.push_back(new Triangle(Vec3(min_x, max_y, max_z), Vec3(max_x, max_y, max_z), Vec3(min_x, max_y, min_z), box_r_t, box_w_t));
+    obj_list.push_back(new Triangle(Vec3(max_x, max_y, max_z), Vec3(max_x, max_y, min_z), Vec3(min_x, max_y, min_z), box_r_t, box_w_t));
+    // add small room walls on the back
+    obj_list.push_back(new Triangle(Vec3(max_x, max_y, max_z), Vec3(min_x, max_y, max_z), Vec3(min_x, min_y, max_z), box_r_t, box_w_t));
+    obj_list.push_back(new Triangle(Vec3(min_x, min_y, max_z), Vec3(max_x, min_y, max_z), Vec3(max_x, max_y, max_z), box_r_t, box_w_t));
+    // add small room walls on the frontbox_w_t    
+	obj_list.push_back(new Triangle(Vec3(min_x, max_y, min_z), Vec3(max_x, max_y, min_z), Vec3(max_x, min_y, min_z), box_r_t, box_w_t));
+    obj_list.push_back(new Triangle(Vec3(max_x, min_y, min_z), Vec3(min_x, min_y, min_z), Vec3(min_x, max_y, min_z), box_r_t, box_w_t));
+    // add small room walls on the left
+    obj_list.push_back(new Triangle(Vec3(min_x, max_y, max_z), Vec3(min_x, max_y, min_z), Vec3(min_x, min_y, min_z), box_r_t, box_w_t));
+    obj_list.push_back(new Triangle(Vec3(min_x, min_y, min_z), Vec3(min_x, min_y, max_z), Vec3(min_x, max_y, max_z), box_r_t, box_w_t));
+    // add small room walls on the right
+    obj_list.push_back(new Triangle(Vec3(max_x, max_y, min_z), Vec3(max_x, max_y, max_z), Vec3(max_x, min_y, max_z), box_r_t, box_w_t));
+    obj_list.push_back(new Triangle(Vec3(max_x, min_y, max_z), Vec3(max_x, min_y, min_z), Vec3(max_x, max_y, min_z), box_r_t, box_w_t));
+	
+	// add main tetrahedron
+	Vec3 move(0, 0.5, -3);
+	float tetra_r_t = 0.5f;
+	float tetra_w_t = 0.6f;
+	Vec3 v1 = 0.5 * Vec3( 1,  1,  1) + move;
+	Vec3 v2 = 0.5 * Vec3(-1, -1,  1) + move;
+	Vec3 v3 = 0.5 * Vec3(-1,  1, -1) + move;
+	Vec3 v4 = 1 * Vec3( 1, -1, -1) + move;
 
-	// add_tetrahedron(obj_list, v1, v2, v3, v4, 0, 0);
+	add_tetrahedron(obj_list, v1, v2, v3, v4, tetra_r_t, tetra_w_t);
 
-	// for (int i = 0; i < 30; i++) {
-	// 	float scale = get_random(0.1f, 0.4f); // 0.1 到 0.4
-		
-	// 	float max_offset = scale * sqrt(3); 
-		
-	// 	float safe_x_min = -4.0f + max_offset;
-	// 	float safe_x_max = 4.0f - max_offset;
-	// 	float safe_y_min = -0.55f + max_offset;
-	// 	float safe_y_max = 4.0f - max_offset;
-	// 	float safe_z_min = -10.0f + max_offset;
-	// 	float safe_z_max = 2.0f - max_offset;
-		
-	// 	float x = get_random(safe_x_min, safe_x_max);
-	// 	float y = get_random(safe_y_min, safe_y_max);
-	// 	float z = get_random(safe_z_min, safe_z_max);
-		
-	// 	Vec3 move(x, y, z);
-	// 	Vec3 v1 = scale * Vec3( 1,  1,  1) + move;
-	// 	Vec3 v2 = scale * Vec3(-1, -1,  1) + move;
-	// 	Vec3 v3 = scale * Vec3(-1,  1, -1) + move;
-	// 	Vec3 v4 = scale * Vec3( 1, -1, -1) + move;
-		
-	// 	add_tetrahedron(obj_list, v1, v2, v3, v4, 0, 0);
-	// }
-
-	// // add random objs
+	// add random spheres
 	for (int i = 0; i < 15; i++) {
 		float xr = get_random(-2, 2);
 		float zr = get_random(-1.5, 1.5);
@@ -155,68 +92,144 @@ void create_scene_objects(vector<Object *> &obj_list) {
 		// if (r2 < 0){
 		// 	r2 = 0;
 		// }
-		obj_list.push_back(new Sphere(Vec3(xr, -0.45, zr-2), 0.05, r1, 0));
+		obj_list.push_back(new Sphere(Vec3(xr, -0.45, zr-2), 0.05, 0, 0));
 	}
+
+	// add random tetrahedrons
+    for (int i = 0; i < 30; i++) {
+        float scale = 0.05; 
+        
+        float max_offset = scale * sqrt(3); 
+        
+        float tetra_x_min = -4.0f + max_offset;
+        float tetra_x_max = 4.0f - max_offset;
+        float tetra_y_min = -0.55f + max_offset;
+        float tetra_y_max = 4.0f - max_offset;
+        float tetra_z_min = -10.0f + max_offset;
+        float tetra_z_max = 2.0f - max_offset;
+        
+        float x = get_random(tetra_x_min, tetra_x_max);
+        float y = -0.45; 
+        float z = get_random(tetra_z_min, tetra_z_max);
+
+		float r1 = get_random(0, 1);
+        float transparency = get_random(0, 0.3f);
+        
+        Vec3 move(x, y, z);
+        Vec3 v1 = scale * Vec3( 1,  1,  1) + move;
+        Vec3 v2 = scale * Vec3(-1, -1,  1) + move;
+        Vec3 v3 = scale * Vec3(-1,  1, -1) + move;
+        Vec3 v4 = scale * Vec3( 1, -1, -1) + move;
+        
+        add_tetrahedron(obj_list, v1, v2, v3, v4, r1, transparency);
+    }
+
+	// add random boxes
+    for (int i = 0; i < 10; i++) {
+        // Random position 
+        float xr = get_random(-2, 2);
+        float zr = get_random(-1.5, 1.5);
+        
+        float cube_size = get_random(0.05f, 0.15f);
+        float half_size = cube_size / 2.0f;
+        
+
+        float r1 = get_random(0, 1);
+        float transparency = get_random(0, 0.3f);
+        
+        Vec3 center(xr, -0.45f + half_size, zr - 2);
+        
+        float cube_min_x = center.x() - half_size;
+        float cube_max_x = center.x() + half_size;
+        float cube_min_y = center.y() - half_size;
+        float cube_max_y = center.y() + half_size;
+        float cube_min_z = center.z() - half_size;
+        float cube_max_z = center.z() + half_size;
+        
+        // Create cube faces using triangles
+        // Bottom face
+        obj_list.push_back(new Triangle(Vec3(cube_min_x, cube_min_y, cube_min_z), 
+                                        Vec3(cube_max_x, cube_min_y, cube_min_z), 
+                                        Vec3(cube_min_x, cube_min_y, cube_max_z), r1, transparency));
+        obj_list.push_back(new Triangle(Vec3(cube_max_x, cube_min_y, cube_min_z), 
+                                        Vec3(cube_max_x, cube_min_y, cube_max_z), 
+                                        Vec3(cube_min_x, cube_min_y, cube_max_z), r1, transparency));
+        
+        // Top face
+        obj_list.push_back(new Triangle(Vec3(cube_min_x, cube_max_y, cube_max_z), 
+                                        Vec3(cube_max_x, cube_max_y, cube_max_z), 
+                                        Vec3(cube_min_x, cube_max_y, cube_min_z), r1, transparency));
+        obj_list.push_back(new Triangle(Vec3(cube_max_x, cube_max_y, cube_max_z), 
+                                        Vec3(cube_max_x, cube_max_y, cube_min_z), 
+                                        Vec3(cube_min_x, cube_max_y, cube_min_z), r1, transparency));
+        
+        // Back face
+        obj_list.push_back(new Triangle(Vec3(cube_max_x, cube_max_y, cube_max_z), 
+                                        Vec3(cube_min_x, cube_max_y, cube_max_z), 
+                                        Vec3(cube_min_x, cube_min_y, cube_max_z), r1, transparency));
+        obj_list.push_back(new Triangle(Vec3(cube_min_x, cube_min_y, cube_max_z), 
+                                        Vec3(cube_max_x, cube_min_y, cube_max_z), 
+                                        Vec3(cube_max_x, cube_max_y, cube_max_z), r1, transparency));
+        
+        // Front face
+        obj_list.push_back(new Triangle(Vec3(cube_min_x, cube_max_y, cube_min_z), 
+                                        Vec3(cube_max_x, cube_max_y, cube_min_z), 
+                                        Vec3(cube_max_x, cube_min_y, cube_min_z), r1, transparency));
+        obj_list.push_back(new Triangle(Vec3(cube_max_x, cube_min_y, cube_min_z), 
+                                        Vec3(cube_min_x, cube_min_y, cube_min_z), 
+                                        Vec3(cube_min_x, cube_max_y, cube_min_z), r1, transparency));
+        
+        // Left face
+        obj_list.push_back(new Triangle(Vec3(cube_min_x, cube_max_y, cube_max_z), 
+                                        Vec3(cube_min_x, cube_max_y, cube_min_z), 
+                                        Vec3(cube_min_x, cube_min_y, cube_min_z), r1, transparency));
+        obj_list.push_back(new Triangle(Vec3(cube_min_x, cube_min_y, cube_min_z), 
+                                        Vec3(cube_min_x, cube_min_y, cube_max_z), 
+                                        Vec3(cube_min_x, cube_max_y, cube_max_z), r1, transparency));
+        
+        // Right face
+        obj_list.push_back(new Triangle(Vec3(cube_max_x, cube_max_y, cube_min_z), 
+                                        Vec3(cube_max_x, cube_max_y, cube_max_z), 
+                                        Vec3(cube_max_x, cube_min_y, cube_max_z), r1, transparency));
+        obj_list.push_back(new Triangle(Vec3(cube_max_x, cube_min_y, cube_max_z), 
+                                        Vec3(cube_max_x, cube_min_y, cube_min_z), 
+                                        Vec3(cube_max_x, cube_max_y, cube_min_z), r1, transparency));
+    }
+
 }
 
 void create_scene_lights(vector<Light> &lights) {
-    for (int i = 0; i < 1200; i++) {
+	for (int i = 0; i < 50; i++) {
 		float xr = get_random(-1.5, 1.5);
 		float yr = get_random(0, 2);
 		float zr = get_random(-6, 1);
-        
-        float max_intensity = 0.05f;
-		float c = get_random(0, max_intensity);
-        if(i < 200){
-            // pure red 
-            lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
-        }else if(i < 400){
-            // red + green 
-            lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
-        }else if(i < 600){
-			// pure green
-            lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
-        }else if(i < 800){
-            // green + blue 
-            lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
-        }else if(i < 1000){
-            // pure blue
-            lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
-        }else{
-            // red + blue 
-            lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, c)));
-		}
-    }
-	// for (int i = 0; i < 10; i++) {
-	// 	float xr = get_random(-1.5, 1.5);
-	// 	float zr = get_random(-6, 1);
-	// 	float yr = get_random(0, 2);
+	
 
-	// 	float max_intensity = 0.5f;
-	// 	float c = get_random(0, max_intensity);
-	// 	if(xr < -1.5f + 1 * (3.0f / 6.0f)){
-	// 		// pure red
-	// 		lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
-	// 	}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
-	// 		// red + green
-	// 		lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
-	// 	}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
-	// 		// pure green
-	// 		lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
-	// 	}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
-	// 		// green + blue
-	// 		lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
-	// 	}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
-	// 		// pure blue
-	// 		lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
-	// 	}else{
-	// 		// red + blue
-	// 		lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, c)));
-	// 	}
-	// }
+		float max_intensity = 0.05f;
+		float c = get_random(0, max_intensity);
+		if(yr < -1.5f + 1 * (3.0f / 6.0f)){
+			// pure red
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
+		}else if(yr < -1.5f + 2 * (3.0f / 6.0f)){
+			// red + green
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
+		}else if(yr < -1.5f + 3 * (3.0f / 6.0f)){
+			// pure green
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
+		}else if(yr < -1.5f + 4 * (3.0f / 6.0f)){
+			// green + blue
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
+		}else if(yr < -1.5f + 5 * (3.0f / 6.0f)){
+			// pure blue
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
+		}else{
+			// red + blue
+			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, c)));
+		}
+	}
 }
 
-void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
+void create_scene_light_grids(vector<LightGrid> &lgs) {
 	lgs.clear();
 
 	// create all levels of lg
@@ -234,19 +247,19 @@ void create_scene_light_grids(vector<LightGrid> &lgs, vector<Vec3> &bounds) {
 
 		float max_intensity = 0.05f;
 		float c = get_random(0, max_intensity);
-		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
+		if(yr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
 			I = Vec3(c, 0, 0);
-		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
+		}else if(yr < -1.5f + 2 * (3.0f / 6.0f)){
 			// red + green
 			I = Vec3(c, c, 0);
-		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
+		}else if(yr < -1.5f + 3 * (3.0f / 6.0f)){
 			// pure green
 			I = Vec3(0, c, 0);
-		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
+		}else if(yr < -1.5f + 4 * (3.0f / 6.0f)){
 			// green + blue
 			I = Vec3(0, c, c);
-		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
+		}else if(yr < -1.5f + 5 * (3.0f / 6.0f)){
 			// pure blue
 			I = Vec3(0, 0, c);
 		}else{
