@@ -40,9 +40,7 @@ void add_box(vector<Object *> &obj_list) {
 
 void create_scene_objects(vector<Object *> &obj_list) {
 	// add main sphere
-	obj_list.push_back(new Sphere(Vec3(1.5, 0, -2.5), 0.5, 0, 0, DIAMOND_N));
-	// obj_list.push_back(new Sphere(Vec3(1, 0, -1.75), 0.5, 0.6, 0, WATER_N));
-	// obj_list.push_back(new Sphere(Vec3(-1.5, 0, -2.5), 0.5, 0.8, 0, DIAMOND_N));
+	obj_list.push_back(new Sphere(Vec3(1.5, 0, -2.5), 0.5, 0.8, 0, DIAMOND_N));
 
 	// add main box
 	float min_x = -2.0f;
@@ -51,7 +49,7 @@ void create_scene_objects(vector<Object *> &obj_list) {
     float max_y = 0.5f;
     float min_z = -3.5f;
     float max_z = -2.5f;
-    float box_r_t = 0.5f;
+    float box_r_t = 0.8f;
 	float box_w_t = 0.6f; 
     // add small room floor
     obj_list.push_back(new Triangle(Vec3(min_x, min_y, min_z), Vec3(max_x, min_y, min_z), Vec3(min_x, min_y, max_z), box_r_t, box_w_t));
@@ -74,7 +72,7 @@ void create_scene_objects(vector<Object *> &obj_list) {
 	
 	// add main tetrahedron
 	Vec3 move(0, 0.5, -3);
-	float tetra_r_t = 0.5f;
+	float tetra_r_t = 0;
 	float tetra_w_t = 0.6f;
 	Vec3 v1 = 0.5 * Vec3( 1,  1,  1) + move;
 	Vec3 v2 = 0.5 * Vec3(-1, -1,  1) + move;
@@ -199,27 +197,26 @@ void create_scene_objects(vector<Object *> &obj_list) {
 }
 
 void create_scene_lights(vector<Light> &lights) {
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 1200; i++) {
 		float xr = get_random(-1.5, 1.5);
 		float yr = get_random(0, 2);
 		float zr = get_random(-6, 1);
-	
 
 		float max_intensity = 0.05f;
 		float c = get_random(0, max_intensity);
-		if(yr < -1.5f + 1 * (3.0f / 6.0f)){
+		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, 0, 0)));
-		}else if(yr < -1.5f + 2 * (3.0f / 6.0f)){
+		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
 			// red + green
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(c, c, 0)));
-		}else if(yr < -1.5f + 3 * (3.0f / 6.0f)){
+		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
 			// pure green
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, 0)));
-		}else if(yr < -1.5f + 4 * (3.0f / 6.0f)){
+		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
 			// green + blue
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, c, c)));
-		}else if(yr < -1.5f + 5 * (3.0f / 6.0f)){
+		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
 			// pure blue
 			lights.push_back(Light(Vec3(xr, yr, zr), Vec3(0, 0, c)));
 		}else{
@@ -241,25 +238,25 @@ void create_scene_light_grids(vector<LightGrid> &lgs) {
 	// creating VPL
 	for (int i = 0; i < 1200; i++) {
 		float xr = get_random(-1.5, 1.5);
-		float zr = get_random(-6, 1);
 		float yr = get_random(0, 2);
+		float zr = get_random(-6, 1);
 		Vec3 I;
 
 		float max_intensity = 0.05f;
 		float c = get_random(0, max_intensity);
-		if(yr < -1.5f + 1 * (3.0f / 6.0f)){
+		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
 			// pure red
 			I = Vec3(c, 0, 0);
-		}else if(yr < -1.5f + 2 * (3.0f / 6.0f)){
+		}else if(xr < -1.5f + 2 * (3.0f / 6.0f)){
 			// red + green
 			I = Vec3(c, c, 0);
-		}else if(yr < -1.5f + 3 * (3.0f / 6.0f)){
+		}else if(xr < -1.5f + 3 * (3.0f / 6.0f)){
 			// pure green
 			I = Vec3(0, c, 0);
-		}else if(yr < -1.5f + 4 * (3.0f / 6.0f)){
+		}else if(xr < -1.5f + 4 * (3.0f / 6.0f)){
 			// green + blue
 			I = Vec3(0, c, c);
-		}else if(yr < -1.5f + 5 * (3.0f / 6.0f)){
+		}else if(xr < -1.5f + 5 * (3.0f / 6.0f)){
 			// pure blue
 			I = Vec3(0, 0, c);
 		}else{
@@ -287,13 +284,14 @@ void create_scene_light_grids(vector<LightGrid> &lgs) {
 
 // for light grid
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<LightGrid> &lgs) {
+	add_box(obj_list);
 	create_scene_objects(obj_list);
-	// create_scene_light_grids(lgs, bounds);
+	create_scene_light_grids(lgs);
 }
 
 // for light
 void create_scene(vector<Object *> &obj_list, vector<Vec3> &camera_position, vector<Light> &lights) {
-	create_scene_objects(obj_list);
 	add_box(obj_list);
+	create_scene_objects(obj_list);
 	create_scene_lights(lights);
 }
