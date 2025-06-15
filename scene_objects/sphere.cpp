@@ -81,7 +81,7 @@ float Sphere::hit(const Ray &ray, float min_t, float max_t){
 // get the normal vector (unit) ata given point P
 Vec3 Sphere::get_normal_at(Vec3 P) const {
     // check if P is on the sphere
-    if(abs(dot(P - center, P - center) - pow(radius, 2)) > 0.001){
+    if(std::abs(dot(P - center, P - center) - pow(radius, 2)) > 0.001){
         std::cout << "the given P is not on the sphere!!!!";
     }
 

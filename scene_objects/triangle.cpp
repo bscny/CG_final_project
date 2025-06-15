@@ -83,7 +83,7 @@ float Triangle::hit(const Ray &ray, float min_t, float max_t){
     Vec3 rayXv2(cross(ray.Dir, V2));
     float det = dot(V1, rayXv2);
 
-    if(abs(det) < 0.0001){
+    if(std::abs(det) < 0.0001){
         // This ray is parallel to this triangle plane
         return -1;
     }
@@ -119,7 +119,7 @@ float Triangle::hit(const Ray &ray, float min_t, float max_t){
     }
 }
 
-// get the normal vector (unit) ata given point P
+// get the normal vector (unit) at a given point P
 Vec3 Triangle::get_normal_at(Vec3 P) const {
     return unit_vector(cross(V1, V2));
 }
