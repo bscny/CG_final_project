@@ -19,10 +19,12 @@
 
 // Attenuation constants
 #define   KC   1.0
+#define   KL   0
 // #define   KL   0.09
-#define   KL   1
+// #define   KL   1
+#define   KQ   0
 // #define   KQ   0.032
-#define   KQ   1.2
+// #define   KQ   1.2
 
 // define light grid alpha for blending function
 #define   ALPHA   1
