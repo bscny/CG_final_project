@@ -249,12 +249,6 @@ void create_scene_lights(vector<Light> &lights) {
 		float yr = get_random(0, 2);
 		float zr = get_random(-6, 1);
 
-void create_scene_lights(vector<Light> &lights) {
-	for (int i = 0; i < 1200; i++) {
-		float xr = get_random(-1.5, 1.5);
-		float yr = get_random(0, 2);
-		float zr = get_random(-6, 1);
-
 		float max_intensity = 0.05f;
 		float c = get_random(0, max_intensity);
 		if(xr < -1.5f + 1 * (3.0f / 6.0f)){
@@ -322,7 +316,6 @@ void create_scene_light_grids(vector<LightGrid> &lgs) {
 			insert_influenced_grid_vertices(lgs[i], Vec3(xr, yr, zr), I, Vec3(-1.5, 0, -6), H * pow(2, i));
 		} 
 	}
-
 
 	// re-build the lg so that it's as balanced as possible
 	for (int i = 0; i <= lv_num; i ++) {
