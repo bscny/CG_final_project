@@ -5,11 +5,15 @@ Author: 111703022 黃鈺盛
 
 ## Table of content
 
-- [Reference](#reference)
+- [Presentation](#presentation)
 - [Implementation](#implementation)
 - [Build Instruction](#build-instructions)
 
-## Reference
+## Presentation
+
+https://www.canva.com/design/DAGqfm_fZDw/zk21j6hPeohp_W8udGIpvA/edit
+
+hint: for detailed implemented images, got to [page 35](https://www.canva.com/design/DAGqfm_fZDw/zk21j6hPeohp_W8udGIpvA/edit?ui=eyJEIjp7IlQiOnsiQSI6IlBCaFBSNDRnVm5TYlNKcXAifX19)
 
 ### Lighting Grid Hierarchy for Self-illuminating Explosions
 
